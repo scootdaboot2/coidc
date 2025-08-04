@@ -1,0 +1,11 @@
+[
+  {
+    "ResourceType": "Duty Officer",
+    "ResourceName": "OR-DEF-BC41",
+    "Leader": "Jane Smith",
+    "Assigned": 1,
+    "Status": "In Service",
+    "Location": "Cascade Division",
+    "Remarks": "Covering east side"
+  }
+]

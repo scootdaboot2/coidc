@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Central Oregon Staffing</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    .division {
+      background: #fff;
+      margin-bottom: 20px;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .division h2 {
+      margin-top: 0;
+      border-bottom: 2px solid #ccc;
+      padding-bottom: 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .section {
+      margin: 15px 0;
+    }
+    .highlight {
+      color: red;
+      font-weight: bold;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background: #eee;
+    }
+    .btn {
+      background-color: #007bff;
+      color: white;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9em;
+    }
+    .btn:hover {
+      background-color: #0056b3;
+    }
+    .csv-links {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Central Oregon Staffing</h1>
+  <div class="csv-links">
+    <a href="individuals_template.csv" class="btn" download>Download Individuals CSV Template</a>
+    <a href="resources_template.csv" class="btn" download>Download Resources CSV Template</a>
+    <input type="file" id="csvUpload" class="btn" style="margin-left: 10px; background-color: green;">
+  </div>
+  <div id="staffing-container"></div>
+
+  <script>
+    async function loadStaffing() {
+      const [individualsRes, resourcesRes] = await Promise.all([
+        fetch('individuals.json'),
+        fetch('resources.json')
+      ]);
+      const individuals = await individualsRes.json();
+      const resources = await resourcesRes.json();
+
+      const divisions = [
+        "Cascade Division", "Crescent Division", "Newberry East", "Newberry West",
+        "Rivers Division", "Prairie Division", "ODF Prineville", "ODF Sisters", "ODF Fossil"
+      ];
+
+      const container = document.getElementById('staffing-container');
+      container.innerHTML = '';
+
+      divisions.forEach(div => {
+        const divEl = document.createElement('div');
+        divEl.className = 'division';
+        divEl.innerHTML = `<h2><span>${div}</span><span style="font-size: 12px;">Last Modified: ${new Date().toLocaleString()}</span></h2>`;
+
+        // Duty Officer
+        const duty = individuals.find(i => i.Location === div && i.ICSRole === 'DO');
+
+        // Agency Admins (AA, AR)
+        const admins = individuals.filter(i => i.Location === div && (i.ICSRole === 'AA' || i.ICSRole === 'AR'));
+
+        let contactsHTML = '<div class="section">';
+        if (duty) {
+          contactsHTML += `<strong>Duty Officer:</strong> ${duty.First} ${duty.Last} (${duty.Phone})`;
+        } else {
+          contactsHTML += `<strong>Duty Officer:</strong> None Assigned`;
+        }
+
+        if (admins.length > 0) {
+          contactsHTML += ' &nbsp; | &nbsp; <strong>Agency Admin(s):</strong> ';
+          admins.forEach((admin, index) => {
+            if (index > 0) contactsHTML += ', ';
+            contactsHTML += `${admin.First} ${admin.Last} (${admin.Phone}${admin.Phone2 ? ' / ' + admin.Phone2 : ''}, ${admin.Email})`;
+          });
+        }
+        contactsHTML += '</div>';
+        divEl.innerHTML += contactsHTML;
+
+        // Resource Table
+        const res = resources.filter(r => r.Location === div && r.Status !== 'Out of Service');
+        res.sort((a, b) => {
+          const order = ['Late Resource', 'In Service', 'Delayed Response', 'Committed', 'Off Forest', 'Out of Service'];
+          return order.indexOf(a.Status) - order.indexOf(b.Status);
+        });
+
+        let tableHTML = `<div class="section"><table><tr><th>Type</th><th>Name</th><th>Leader</th><th># Assigned</th><th>Status</th><th>Location</th><th>Remarks</th></tr>`;
+        res.forEach(r => {
+          tableHTML += `<tr>
+            <td>${r.ResourceType}</td>
+            <td>${r.ResourceName}</td>
+            <td>${r.Leader}</td>
+            <td>${r.Assigned || ''}</td>
+            <td class="${r.Status === 'Late Resource' ? 'highlight' : ''}">${r.Status}</td>
+            <td>${r.Location}</td>
+            <td>${r.Remarks || ''}</td>
+          </tr>`;
+        });
+        tableHTML += `</table></div>`;
+
+        divEl.innerHTML += tableHTML;
+        divEl.innerHTML += `<button class="btn" onclick="alert('Edit form coming soon for ${div}')">Update Section</button>`;
+
+        container.appendChild(divEl);
+      });
+    }
+
+    loadStaffing();
+  </script>
+</body>
+</html>

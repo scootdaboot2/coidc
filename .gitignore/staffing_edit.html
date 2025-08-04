@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Central Oregon Staffing</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    .btn {
+      background-color: #666;
+      color: white;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9em;
+    }
+    .btn:hover {
+      background-color: #444;
+    }
+    .table-wrapper {
+      display: flex;
+      gap: 30px;
+      align-items: flex-start;
+    }
+    .staffing-container {
+      flex: 2;
+      overflow-x: auto;
+    }
+    .aviation-container {
+      flex: 1;
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background: #eee;
+    }
+    input[type="text"], select {
+      width: 100%;
+      padding: 4px;
+    }
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>Central Oregon Staffing</h1>
+  <div class="section-title">
+    <button class="btn" onclick="downloadCSV('individuals')">Download Individuals CSV</button>
+    <button class="btn" onclick="downloadCSV('resources')">Download Resources CSV</button>
+    <button class="btn" onclick="uploadJSON()">Upload JSON File</button>
+  </div>
+
+  <div class="table-wrapper">
+    <div class="staffing-container">
+      <h2>Divisions</h2>
+      <table id="individuals-table">
+        <thead>
+          <tr>
+            <th>First</th>
+            <th>Last</th>
+            <th>Phone</th>
+            <th>Phone 2</th>
+            <th>Email</th>
+            <th>Agency</th>
+            <th>Unit</th>
+            <th>Location</th>
+            <th>Title</th>
+            <th>ICS Role</th>
+            <th>Assigned To</th>
+            <th>Lead</th>
+            <th>Remarks</th>
+          </tr>
+        </thead>
+        <tbody id="individuals-body"></tbody>
+      </table>
+
+      <h2>Resources</h2>
+      <table id="resources-table">
+        <thead>
+          <tr>
+            <th>Resource Type</th>
+            <th>Resource Name</th>
+            <th>Leader</th>
+            <th># Assigned</th>
+            <th>Status</th>
+            <th>Location</th>
+            <th>Remarks</th>
+          </tr>
+        </thead>
+        <tbody id="resources-body"></tbody>
+      </table>
+    </div>
+
+    <div class="aviation-container">
+      <h2>Rotor Wing</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>Resource</th>
+            <th>Status</th>
+            <th>Location</th>
+            <th>On/Off</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><select><option>HEL T1</option><option>HEL T2</option><option>HEL T3</option><option>Other</option></select></td>
+            <td><input type="text" placeholder="Resource Name" /></td>
+            <td><select><option>Available</option><option>Unavailable</option><option>Maintenance</option></select></td>
+            <td><input type="text" placeholder="Location" /></td>
+            <td><input type="text" placeholder="0800-2000" value="0800-2000" /></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Fixed Wing</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>Resource</th>
+            <th>Status</th>
+            <th>Location</th>
+            <th>On/Off</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><select><option>ATGS</option><option>SEAT</option><option>AIR TANKER</option><option>Other</option></select></td>
+            <td><input type="text" placeholder="Resource Name" /></td>
+            <td><select><option>Available</option><option>Unavailable</option><option>Maintenance</option></select></td>
+            <td><input type="text" placeholder="Location" /></td>
+            <td><input type="text" placeholder="0800-2000" value="0800-2000" /></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <input type="file" id="uploadInput" style="display:none" />
+
+  <script>
+    let individuals = [], resources = [];
+
+    async function loadData() {
+      individuals = await (await fetch('individuals.json')).json();
+      resources = await (await fetch('resources.json')).json();
+      renderTables();
+    }
+
+    function renderTables() {
+      const indBody = document.getElementById('individuals-body');
+      indBody.innerHTML = '';
+      individuals.forEach((person, i) => {
+        const row = document.createElement('tr');
+        for (let key of ["First", "Last", "Phone", "Phone2", "Email", "Agency", "Unit", "Location", "Title", "ICSRole", "AssignedTo", "Lead", "Remarks"]) {
+          const td = document.createElement('td');
+          if (key === 'Lead') {
+            td.innerHTML = `<input type="checkbox" ${person[key] === 'Yes' ? 'checked' : ''} onchange="individuals[${i}].Lead = this.checked ? 'Yes' : 'No'">`;
+          } else if (["Agency", "Unit", "Location", "Title", "ICSRole", "AssignedTo"].includes(key)) {
+            td.innerHTML = `<select onchange="individuals[${i}]['${key}'] = this.value">
+              <option value="${person[key]}">${person[key]}</option>
+              <option value="New Option">New Option</option>
+            </select>`;
+          } else {
+            td.innerHTML = `<input type="text" value="${person[key] || ''}" onchange="individuals[${i}]['${key}'] = this.value">`;
+          }
+          row.appendChild(td);
+        }
+        indBody.appendChild(row);
+      });
+
+      const resBody = document.getElementById('resources-body');
+      resBody.innerHTML = '';
+      resources.forEach((res, i) => {
+        const row = document.createElement('tr');
+        for (let key of ["ResourceType", "ResourceName", "Leader", "Assigned", "Status", "Location", "Remarks"]) {
+          const td = document.createElement('td');
+          if (["ResourceType", "Status", "Location"].includes(key)) {
+            td.innerHTML = `<select onchange="resources[${i}]['${key}'] = this.value">
+              <option value="${res[key]}">${res[key]}</option>
+              <option value="New Option">New Option</option>
+            </select>`;
+          } else {
+            td.innerHTML = `<input type="text" value="${res[key] || ''}" onchange="resources[${i}]['${key}'] = this.value">`;
+          }
+          row.appendChild(td);
+        }
+        resBody.appendChild(row);
+      });
+    }
+
+    function downloadCSV(type) {
+      const data = type === 'individuals' ? individuals : resources;
+      const keys = Object.keys(data[0]);
+      const csv = [keys.join(",")].concat(data.map(row => keys.map(k => `"${row[k] || ''}"`).join(","))).join("\n");
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `${type}_template.csv`;
+      a.click();
+    }
+
+    function uploadJSON() {
+      document.getElementById('uploadInput').click();
+    }
+
+    document.getElementById('uploadInput').addEventListener('change', function (e) {
+      const reader = new FileReader();
+      reader.onload = function () {
+        try {
+          const data = JSON.parse(reader.result);
+          if (Array.isArray(data) && data[0]?.First) individuals = data;
+          else if (Array.isArray(data) && data[0]?.ResourceType) resources = data;
+          renderTables();
+        } catch (err) {
+          alert('Invalid JSON');
+        }
+      };
+      reader.readAsText(e.target.files[0]);
+    });
+
+    loadData();
+  </script>
+</body>
+</html>

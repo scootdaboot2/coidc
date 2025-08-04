@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Central Oregon Staffing</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    .division {
+      background: #fff;
+      margin-bottom: 20px;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .division h2 {
+      margin-top: 0;
+      border-bottom: 2px solid #ccc;
+      padding-bottom: 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .section {
+      margin: 15px 0;
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .highlight {
+      color: red;
+      font-weight: bold;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background: #eee;
+    }
+    .btn {
+      background-color: #007bff;
+      color: white;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9em;
+    }
+    .btn:hover {
+      background-color: #0056b3;
+    }
+    #modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+    }
+    #modalContent {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 600px;
+    }
+    #modalContent h3 {
+      margin-top: 0;
+    }
+    .form-row {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 10px;
+    }
+    .form-row label {
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+    .form-row input, .form-row select, .form-row textarea {
+      padding: 6px;
+      font-size: 1em;
+    }
+  </style>
+</head>
+<body>
+  <h1>Central Oregon Staffing</h1>
+  <div id="staffing-container"></div>
+
+  <div id="modal">
+    <div id="modalContent">
+      <h3>Update Staffing Section</h3>
+      <form id="updateForm">
+        <div class="form-row">
+          <label for="type">Type</label>
+          <select id="type">
+            <option value="individual">Individual</option>
+            <option value="resource">Resource</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label for="division">Division</label>
+          <input id="division" type="text" readonly />
+        </div>
+        <div class="form-row">
+          <label for="first">First Name</label>
+          <input id="first" type="text" />
+        </div>
+        <div class="form-row">
+          <label for="last">Last Name</label>
+          <input id="last" type="text" />
+        </div>
+        <div class="form-row">
+          <label for="phone">Phone</label>
+          <input id="phone" type="text" />
+        </div>
+        <div class="form-row">
+          <label for="email">Email</label>
+          <input id="email" type="email" />
+        </div>
+        <div class="form-row">
+          <label for="ics">ICS Role</label>
+          <input id="ics" type="text" />
+        </div>
+        <div class="form-row">
+          <label for="remarks">Remarks</label>
+          <textarea id="remarks"></textarea>
+        </div>
+        <div class="form-row">
+          <button type="submit" class="btn">Save</button>
+          <button type="button" class="btn" onclick="closeModal()" style="margin-left: 10px; background: gray;">Cancel</button>
+        </div>
+        <div style="margin-top: 20px;">
+          <a href="individuals_template.csv" download>Download Individuals CSV Template</a> | 
+          <a href="resources_template.csv" download>Download Resources CSV Template</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function openModal(division) {
+      document.getElementById('modal').style.display = 'flex';
+      document.getElementById('division').value = division;
+    }
+
+    function closeModal() {
+      document.getElementById('modal').style.display = 'none';
+    }
+
+    async function loadStaffing() {
+      const [individualsRes, resourcesRes] = await Promise.all([
+        fetch('individuals.json'),
+        fetch('resources.json')
+      ]);
+      const individuals = await individualsRes.json();
+      const resources = await resourcesRes.json();
+
+      const divisions = [
+        "Cascade Division", "Crescent Division", "Newberry East", "Newberry West",
+        "Rivers Division", "Prairie Division", "ODF Prineville", "ODF Sisters", "ODF Fossil"
+      ];
+
+      const container = document.getElementById('staffing-container');
+      container.innerHTML = '';
+
+      divisions.forEach(div => {
+        const divEl = document.createElement('div');
+        divEl.className = 'division';
+        divEl.innerHTML = `<h2><span>${div}</span><span style="font-size: 12px;">Last Modified: ${new Date().toLocaleString()}</span></h2>`;
+
+        const duty = individuals.find(i => i.Location === div && i.ICSRole === 'DO');
+        const admins = individuals.filter(i => i.Location === div && (i.ICSRole === 'AA' || i.ICSRole === 'AR'));
+
+        let contactsHTML = '<div class="section">';
+        contactsHTML += `<div><strong>Duty Officer:</strong> ${duty ? `${duty.First} ${duty.Last} (${duty.Phone})` : 'None Assigned'}</div>`;
+        contactsHTML += `<div><strong>Agency Admin(s):</strong> ${admins.length > 0 ? admins.map(admin => `${admin.First} ${admin.Last} (${admin.Phone}${admin.Phone2 ? ' / ' + admin.Phone2 : ''}, ${admin.Email})`).join(', ') : 'None Assigned'}</div>`;
+        contactsHTML += '</div>';
+        divEl.innerHTML += contactsHTML;
+
+        const res = resources.filter(r => r.Location === div && r.Status !== 'Out of Service');
+        res.sort((a, b) => {
+          const order = ['Late Resource', 'In Service', 'Delayed Response', 'Committed', 'Off Forest', 'Out of Service'];
+          return order.indexOf(a.Status) - order.indexOf(b.Status);
+        });
+
+        let tableHTML = `<div class="section"><table><tr><th>Type</th><th>Name</th><th>Leader</th><th># Assigned</th><th>Status</th><th>Location</th><th>Remarks</th></tr>`;
+        res.forEach(r => {
+          tableHTML += `<tr>
+            <td>${r.ResourceType}</td>
+            <td>${r.ResourceName}</td>
+            <td>${r.Leader}</td>
+            <td>${r.Assigned || ''}</td>
+            <td class="${r.Status === 'Late Resource' ? 'highlight' : ''}">${r.Status}</td>
+            <td>${r.Location}</td>
+            <td>${r.Remarks || ''}</td>
+          </tr>`;
+        });
+        tableHTML += `</table></div>`;
+
+        divEl.innerHTML += tableHTML;
+        divEl.innerHTML += `<button class="btn" onclick="openModal('${div}')">Update Section</button>`;
+
+        container.appendChild(divEl);
+      });
+    }
+
+    loadStaffing();
+  </script>
+</body>
+</html>

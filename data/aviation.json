@@ -1,0 +1,20 @@
+{
+  "Rotor Wing": [
+    {
+      "Type": "HEL T1",
+      "Resource": "N1234H",
+      "Status": "Available",
+      "Location": "Redmond",
+      "OnOff": "0800-2000"
+    }
+  ],
+  "Fixed Wing": [
+    {
+      "Type": "SEAT",
+      "Resource": "N5678F",
+      "Status": "Unavailable",
+      "Location": "Prineville",
+      "OnOff": "0800-2000"
+    }
+  ]
+}

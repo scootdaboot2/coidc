@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Central Oregon Staffing</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f8f8f8;
+      padding: 20px;
+      margin: 0;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .main-content {
+      display: flex;
+      gap: 20px;
+    }
+    .division-column {
+      flex: 3;
+    }
+    .aviation-column {
+      flex: 1;
+    }
+    .division-section, .aviation-table-section {
+      margin-bottom: 30px;
+      background: #fff;
+      padding: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .division-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 15px;
+    }
+    .division-meta {
+      font-size: 0.9em;
+      text-align: right;
+      line-height: 1.4;
+    }
+    .division-table, .aviation-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    .division-table th, .division-table td,
+    .aviation-table th, .aviation-table td {
+      border: 1px solid #ddd;
+      padding: 8px 10px;
+      text-align: left;
+    }
+    .division-table th, .aviation-table th {
+      background-color: #f5f5f5;
+      font-weight: bold;
+    }
+    .btn.update-btn {
+      margin-top: 10px;
+      padding: 8px 15px;
+      background: #777;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 3px;
+    }
+    .btn.update-btn:hover {
+      background: #555;
+    }
+    .edit-input, .edit-select {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 4px;
+      border: 1px solid #ccc;
+    }
+    .add-btn, .save-btn {
+      background: #2e7d32;
+      color: #fff;
+      border: none;
+      padding: 6px 12px;
+      cursor: pointer;
+      margin: 6px 4px 6px 0;
+      border-radius: 3px;
+    }
+    .add-btn:hover, .save-btn:hover {
+      background: #1b5e20;
+    }
+    .delete-btn {
+      background: #c62828;
+      color: #fff;
+      border: none;
+      padding: 4px 8px;
+      cursor: pointer;
+      border-radius: 3px;
+    }
+    .delete-btn:hover {
+      background: #8e0000;
+    }
+    .status-late {
+      background-color: #ffebee !important;
+      color: #c62828;
+      font-weight: bold;
+    }
+    .status-out {
+      color: #666;
+      font-style: italic;
+    }
+    .status-committed {
+      background-color: #fff3e0 !important;
+      color: #ef6c00;
+    }
+    .status-delayed {
+      background-color: #fff8e1 !important;
+      color: #f57c00;
+    }
+    .controls {
+      margin: 20px 0;
+      text-align: center;
+      background: #fff;
+      padding: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .filter-controls {
+      margin: 10px 0;
+    }
+    .filter-controls label {
+      margin-right: 15px;
+    }
+    .cofms-header {
+      background: #e3f2fd;
+      border: 2px solid #1976d2;
+      text-align: center;
+      padding: 20px;
+      margin-bottom: 30px;
+      border-radius: 5px;
+    }
+    .cofms-header h2 {
+      margin: 0 0 10px 0;
+      color: #1976d2;
+    }
+  </style>
+</head>
+<body>
+  <h1>Central Oregon Staffing</h1>
+  
+  <div class="cofms-header">
+    <h2>COFMS Duty Officer</h2>
+    <div id="cofms-duty-officer">Loading...</div>
+  </div>
+
+  <div class="controls">
+    <h3>Data Management</h3>
+    <button class="save-btn" onclick="downloadJSON('individuals')">Download Individuals JSON</button>
+    <button class="save-btn" onclick="downloadJSON('resources')">Download Resources JSON</button>
+    <button class="save-btn" onclick="downloadJSON('aviation')">Download Aviation JSON</button>
+    <br><br>
+    <input type="file" id="uploadIndividuals" style="display:none" accept=".json" onchange="uploadJSON(event, 'individuals')">
+    <button class="update-btn" onclick="document.getElementById('uploadIndividuals').click()">Upload Individuals JSON</button>
+    
+    <input type="file" id="uploadResources" style="display:none" accept=".json" onchange="uploadJSON(event, 'resources')">
+    <button class="update-btn" onclick="document.getElementById('uploadResources').click()">Upload Resources JSON</button>
+    
+    <input type="file" id="uploadAviation" style="display:none" accept=".json" onchange="uploadJSON(event, 'aviation')">
+    <button class="update-btn" onclick="document.getElementById('uploadAviation').click()">Upload Aviation JSON</button>
+  </div>
+
+  <div class="filter-controls">
+    <label><input type="checkbox" id="filterOutOfService" checked> Hide Out of Service</label>
+    <label><input type="checkbox" id="filterOffForest"> Hide Off Forest</label>
+    <button class="update-btn" onclick="renderPage()">Apply Filters</button>
+  </div>
+
+  <div class="main-content">
+    <div id="staffing-container" class="division-column"></div>
+    <div id="aviation-container" class="aviation-column"></div>
+  </div>
+
+  <script>
+    // Data storage
+    let individualData = [
+      {
+        "First": "Jane",
+        "Last": "Smith",
+        "Phone": "541-555-1234",
+        "Phone2": "541-555-5678",
+        "Email": "jane.smith@example.com",
+        "Agency": "USFS",
+        "Unit": "COFMS",
+        "Location": "Cascade Division",
+        "Title": "USFS-IC",
+        "ICSRole": "AA",
+        "AssignedTo": "OR-DEF-BC41",
+        "Lead": "Yes",
+        "Remarks": ""
+      }
+    ];
+
+    let resourceData = [
+      {
+        "ResourceType": "Duty Officer",
+        "ResourceName": "OR-DEF-BC41",
+        "Leader": "Jane Smith",
+        "Assigned": 1,
+        "Status": "In Service",
+        "Location": "Cascade Division",
+        "Remarks": "Covering east side"
+      }
+    ];
+
+    let aviationData = {
+      "Rotor Wing": [
+        {
+          "Type": "HEL T1",
+          "Resource": "N1234H",
+          "Status": "Available",
+          "Location": "Redmond",
+          "OnOff": "0800-2000"
+        }
+      ],
+      "Fixed Wing": [
+        {
+          "Type": "SEAT",
+          "Resource": "N5678F",
+          "Status": "Unavailable",
+          "Location": "Prineville",
+          "OnOff": "0800-2000"
+        }
+      ]
+    };
+
+    // Configuration arrays
+    const divisions = [
+      "Cascade Division", "Crescent Division", "Newberry East", "Newberry West", 
+      "Rivers Division", "Prairie Division", "ODF Prineville", "ODF Sisters", "ODF Fossil"
+    ];
+
+    const agencies = ["USFS", "BLM", "ODF"];
+    
+    const units = [
+      "Prineville FO", "Deschutes FO", "Central Oregon", "DEF-Bend", "DEF-Sisters", 
+      "DEF-Crescent", "OCF-Prineville", "COFMS"
+    ];
+
+    const locations = [
+      "Cascade", "Crescent", "Newberry East", "Newberry West", "Rivers", "Prairie", 
+      "ODF Sisters", "ODF Prineville", "ODF Fossil", "ODF John Day", "BIAK", "Walker Range"
+    ];
+
+    const titles = [
+      "BLM-Prineville District Manager", "BLM-Deschutes Field Manager", 
+      "BLM-Central Oregon Manager", "USFS-IC", "FMO", "BC", "Operations"
+    ];
+
+    const icsRoles = ["FFT1", "FFT2", "TFLD", "DIVS", "AA", "AR"];
+
+    const resourceTypes = [
+      "Duty Officer", "Overhead (FMO)", "Overhead (FT)", "Overhead (BC)", "Prevention", 
+      "Lookout", "ENG T3", "ENG T5", "ENG T6", "Overhead (FOS)", "CRWT2 IA", "CRWT2", 
+      "IHC", "WFMT1", "WFMT2", "HEL T1", "HEL T2", "HEL T3", "DOZ T1", "DOZ T2", 
+      "DOZ T3", "WTS T1", "WTS T2", "WTS T3", "IA MOD", "Severity", "Support"
+    ];
+
+    const statuses = ["In Service", "Delayed Response", "Out of Service", "Off Forest", "Late Resource", "Committed"];
+
+    // Helper functions
+    function createSelectOptions(array, selected = '') {
+      return array.map(item => 
+        `<option value="${item}" ${item === selected ? 'selected' : ''}>${item}</option>`
+      ).join('');
+    }
+
+    function getStatusClass(status) {
+      switch(status) {
+        case 'Late Resource': return 'status-late';
+        case 'Out of Service': return 'status-out';
+        case 'Committed': return 'status-committed';
+        case 'Delayed Response': return 'status-delayed';
+        default: return '';
+      }
+    }
+
+    function sortResourcesByStatus(resources) {
+      const statusOrder = ['Late Resource', 'In Service', 'Delayed Response', 'Committed', 'Off Forest', 'Out of Service'];
+      return resources.sort((a, b) => {
+        const aIndex = statusOrder.indexOf(a.Status) === -1 ? 999 : statusOrder.indexOf(a.Status);
+        const bIndex = statusOrder.indexOf(b.Status) === -1 ? 999 : statusOrder.indexOf(b.Status);
+        return aIndex - bIndex;
+      });
+    }
+
+    function shouldShowResource(resource) {
+      const hideOutOfService = document.getElementById('filterOutOfService').checked;
+      const hideOffForest = document.getElementById('filterOffForest').checked;
+      
+      if (hideOutOfService && resource.Status === 'Out of Service') return false;
+      if (hideOffForest && resource.Status === 'Off Forest') return false;
+      return true;
+    }
+
+    // Data transformation
+    function getStaffingData() {
+      const divisionMap = new Map();
+      
+      // Initialize all divisions
+      divisions.forEach(divName => {
+        divisionMap.set(divName, {
+          name: divName,
+          dutyOfficer: '',
+          agencyAdmins: [],
+          lastModified: new Date().toLocaleString(),
+          resources: []
+        });
+      });
+      
+      // Add individuals to divisions
+      individualData.forEach(person => {
+        const location = person.Location || 'Unassigned';
+        const divName = divisions.find(d => d.includes(location)) || location;
+        
+        if (!divisionMap.has(divName)) {
+          divisionMap.set(divName, {
+            name: divName,
+            dutyOfficer: '',
+            agencyAdmins: [],
+            lastModified: new Date().toLocaleString(),
+            resources: []
+          });
+        }
+        
+        const division = divisionMap.get(divName);
+        if (person.ICSRole === 'AA' || person.ICSRole === 'AR') {
+          division.agencyAdmins.push(`${person.First} ${person.Last} (${person.Phone}${person.Phone2 ? ' / ' + person.Phone2 : ''}, ${person.Email})`);
+        }
+      });
+
+      // Add resources to divisions and find duty officers
+      resourceData.forEach(resource => {
+        const location = resource.Location || 'Unassigned';
+        const divName = divisions.find(d => d.includes(location)) || location;
+        
+        if (divisionMap.has(divName)) {
+          const division = divisionMap.get(divName);
+          division.resources.push({
+            type: resource.ResourceType,
+            name: resource.ResourceName,
+            leader: resource.Leader,
+            assigned: resource.Assigned,
+            status: resource.Status,
+            location: resource.Location,
+            remarks: resource.Remarks
+          });
+          
+          if (resource.ResourceType === 'Duty Officer') {
+            division.dutyOfficer = resource.Leader;
+          }
+        }
+      });
+
+      // Sort resources by status for each division
+      divisionMap.forEach(division => {
+        division.resources = sortResourcesByStatus(division.resources);
+      });
+
+      return Array.from(divisionMap.values());
+    }
+
+    function getCOFMSDutyOfficer() {
+      const cofmsResource = resourceData.find(r => 
+        r.ResourceType === 'Duty Officer' && r.ResourceName.includes('COFMS')
+      );
+      
+      if (cofmsResource) {
+        const individual = individualData.find(i => 
+          `${i.First} ${i.Last}` === cofmsResource.Leader
+        );
+        if (individual) {
+          return `${individual.First} ${individual.Last}<br>Phone: ${individual.Phone}${individual.Phone2 ? ' / ' + individual.Phone2 : ''}<br>Email: ${individual.Email}`;
+        }
+        return cofmsResource.Leader;
+      }
+      return 'None Assigned';
+    }
+
+    // JSON handling
+    function downloadJSON(type) {
+      let data, filename;
+      switch(type) {
+        case 'individuals':
+          data = individualData;
+          filename = 'individuals.json';
+          break;
+        case 'resources':
+          data = resourceData;
+          filename = 'resources.json';
+          break;
+        case 'aviation':
+          data = aviationData;
+          filename = 'aviation.json';
+          break;
+      }
+      
+      const jsonStr = JSON.stringify(data, null, 2);
+      const blob = new Blob([jsonStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function uploadJSON(event, type) {
+      const file = event.target.files[0];
+      if (!file) return;
+      
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const jsonData = JSON.parse(e.target.result);
+          switch(type) {
+            case 'individuals':
+              individualData = jsonData;
+              break;
+            case 'resources':
+              resourceData = jsonData;
+              break;
+            case 'aviation':
+              aviationData = jsonData;
+              break;
+          }
+          renderPage();
+          alert(`${type} data loaded successfully!`);
+        } catch (error) {
+          alert(`Error loading ${type} data: ${error.message}`);
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    // Edit functions
+    function createEditableRow(resource) {
+      const resourceNames = resourceData.map(r => r.ResourceName);
+      const leaders = individualData.map(i => `${i.First} ${i.Last}`);
+      
+      return `
+        <tr>
+          <td><select class="edit-select">${createSelectOptions(resourceTypes, resource.type)}</select></td>
+          <td><input class="edit-input" value="${resource.name}" /></td>
+          <td><select class="edit-select">${createSelectOptions(leaders, resource.leader)}</select></td>
+          <td><input class="edit-input" type="number" value="${resource.assigned}" /></td>
+          <td><select class="edit-select">${createSelectOptions(statuses, resource.status)}</select></td>
+          <td><select class="edit-select">${createSelectOptions(locations, resource.location)}</select></td>
+          <td><input class="edit-input" value="${resource.remarks}" /></td>
+          <td><button class="delete-btn" onclick="this.closest('tr').remove()">✖</button></td>
+        </tr>
+      `;
+    }
+
+    function toggleDivisionEdit(div, divisionData) {
+      const table = div.querySelector('table');
+      const tbody = table.querySelector('tbody');
+      tbody.innerHTML = divisionData.resources.map(res => createEditableRow(res)).join('');
+
+      const addBtn = document.createElement('button');
+      addBtn.className = 'add-btn';
+      addBtn.textContent = '+ Add Resource';
+      addBtn.onclick = () => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = createEditableRow({ type: '', name: '', leader: '', assigned: 1, status: 'In Service', location: divisionData.name, remarks: '' });
+        tbody.appendChild(tr);
+      };
+
+      const prevAdd = div.querySelector('.add-btn');
+      if (prevAdd) prevAdd.remove();
+      table.insertAdjacentElement('beforebegin', addBtn);
+      
+      const saveBtn = document.createElement('button');
+      saveBtn.className = 'save-btn';
+      saveBtn.textContent = 'Save Section';
+      saveBtn.onclick = () => {
+        const updatedRows = [];
+        tbody.querySelectorAll('tr').forEach(row => {
+          const selects = row.querySelectorAll('select');
+          const inputs = row.querySelectorAll('input');
+          if (selects.length && inputs.length) {
+            updatedRows.push({
+              type: selects[0].value,
+              name: inputs[0].value,
+              leader: selects[1].value,
+              assigned: parseInt(inputs[1].value) || 1,
+              status: selects[2].value,
+              location: selects[3].value,
+              remarks: inputs[2].value
+            });
+          }
+        });
+
+        // Update resourceData
+        resourceData = resourceData.filter(r => r.Location !== divisionData.name);
+        updatedRows.forEach(row => {
+          if (row.name) {
+            resourceData.push({
+              ResourceType: row.type,
+              ResourceName: row.name,
+              Leader: row.leader,
+              Assigned: row.assigned,
+              Status: row.status,
+              Location: row.location,
+              Remarks: row.remarks
+            });
+          }
+        });
+
+        renderPage();
+        alert('Division saved! Use "Download Resources JSON" to save changes.');
+      };
+
+      div.appendChild(saveBtn);
+    }
+
+    // UI Creation
+    function createDivisionSection(division) {
+      const div = document.createElement('div');
+      div.className = 'division-section';
+      div.dataset.division = division.name;
+
+      const header = document.createElement('div');
+      header.className = 'division-header';
+      header.innerHTML = `
+        <h2>${division.name}</h2>
+        <div class="division-meta">
+          <strong>Last Modified:</strong> ${division.lastModified}<br><br>
+          <strong>Duty Officer:</strong><br>
+          ${division.dutyOfficer || 'None Assigned'}<br><br>
+          <strong>Agency Admin(s):</strong><br>
+          ${division.agencyAdmins.length > 0 ? division.agencyAdmins.join('<br>') : 'None Assigned'}
+        </div>
+      `;
+
+      const updateBtn = document.createElement('button');
+      updateBtn.className = 'btn update-btn';
+      updateBtn.textContent = 'Edit Section';
+      updateBtn.onclick = () => toggleDivisionEdit(div, division);
+
+      const table = document.createElement('table');
+      table.className = 'division-table';
+      
+      const filteredResources = division.resources.filter(shouldShowResource);
+      
+      table.innerHTML = `
+        <thead>
+          <tr>
+            <th>Resource Type</th><th>Resource Name</th><th>Leader</th><th># Assigned</th><th>Status</th><th>Location</th><th>Remarks</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${filteredResources.map(res => `
+            <tr class="${getStatusClass(res.status)}">
+              <td>${res.type}</td>
+              <td>${res.name}</td>
+              <td>${res.leader}</td>
+              <td>${res.assigned}</td>
+              <td>${res.status}</td>
+              <td>${res.location}</td>
+              <td>${res.remarks}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      `;
+
+      div.appendChild(header);
+      div.appendChild(updateBtn);
+      div.appendChild(table);
+      return div;
+    }
+
+    function createAviationSection() {
+      const container = document.createElement('div');
+      container.className = 'aviation-section';
+
+      const aviationResources = [];
+      Object.entries(aviationData).forEach(([type, resources]) => {
+        resources.forEach(resource => {
+          aviationResources.push({
+            type: type,
+            resource: resource.Resource,
+            status: resource.Status,
+            location: resource.Location,
+            onoff: resource.OnOff
+          });
+        });
+      });
+
+      const rotorWing = aviationResources.filter(r => r.type === 'Rotor Wing');
+      const fixedWing = aviationResources.filter(r => r.type === 'Fixed Wing');
+
+      container.innerHTML = '<h2>Aviation Resources</h2>';
+      container.appendChild(createAviationTable('Rotor Wing', rotorWing));
+      container.appendChild(createAviationTable('Fixed Wing', fixedWing));
+      return container;
+    }
+
+    function createAviationTable(title, data) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'aviation-table-section';
+
+      const table = document.createElement('table');
+      table.className = 'aviation-table';
+      table.innerHTML = `
+        <thead><tr><th colspan="5">${title}</th></tr>
+        <tr><th>Type</th><th>Resource</th><th>Status</th><th>Location</th><th>On/Off</th></tr></thead>
+        <tbody>
+          ${data.map(row => `
+            <tr>
+              <td>${row.type}</td>
+              <td>${row.resource}</td>
+              <td>${row.status}</td>
+              <td>${row.location}</td>
+              <td>${row.onoff}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      `;
+
+      wrapper.appendChild(table);
+      return wrapper;
+    }
+
+    function renderPage() {
+      // Update COFMS Duty Officer
+      document.getElementById('cofms-duty-officer').innerHTML = getCOFMSDutyOfficer();
+      
+      // Render divisions
+      const staffingData = getStaffingData();
+      const staffingEl = document.getElementById('staffing-container');
+      staffingEl.innerHTML = '';
+      
+      staffingData.forEach(div => {
+        staffingEl.appendChild(createDivisionSection(div));
+      });
+
+      // Render aviation
+      const aviationEl = document.getElementById('aviation-container');
+      aviationEl.innerHTML = '';
+      aviationEl.appendChild(createAviationSection());
+    }
+
+    // Initialize
+    renderPage();
+  </script>
+</body>
+</html>

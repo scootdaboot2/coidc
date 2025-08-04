@@ -1,0 +1,405 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Central Oregon Staffing</title>
+<style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    .btn {
+      background-color: #666;
+      color: white;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9em;
+    }
+    .btn:hover {
+      background-color: #444;
+    }
+    .table-wrapper {
+      display: flex;
+      gap: 30px;
+      align-items: flex-start;
+    }
+    .staffing-container, .aviation-container {
+      background: white;
+      padding: 16px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    .staffing-container {
+      flex: 2;
+      overflow-x: auto;
+    }
+    .aviation-container {
+      flex: 1;
+      overflow-x: auto;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 30px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background: #eee;
+    }
+    input[type="text"], select {
+      width: 100%;
+      padding: 4px;
+    }
+    .section-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .edit-input {
+      width: 100%;
+      padding: 4px;
+      border: 1px solid #aaa;
+    }
+    .add-row-btn {
+      background: #bbb;
+      color: black;
+      border: none;
+      cursor: pointer;
+      padding: 4px 8px;
+      font-weight: bold;
+      font-size: 1.1em;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+<h1>Central Oregon Staffing</h1>
+<div class="section-title">
+<button class="btn" id="editToggle" onclick="toggleEditMode()">Enter Edit Mode</button>
+<div class="save-buttons" id="saveButtons" style="display: none;">
+<button class="btn" onclick="downloadJSON('individuals')">Save Individuals</button>
+<button class="btn" onclick="downloadJSON('resources')">Save Resources</button>
+<button class="btn" onclick="downloadJSON('aviation')">Save Aviation</button>
+</div>
+</div>
+<div class="table-wrapper">
+<div class="staffing-container">
+<h2>Division Resources</h2>
+<button class="add-row-btn" onclick="addDivisionResourceRow()">+</button>
+<div id="staffing-container"></div>
+</div>
+<div class="aviation-container">
+<h2>Aviation Resources</h2>
+<button class="add-row-btn" onclick="addAviationResourceRow()">+</button>
+<div id="aviation-container"></div>
+</div>
+</div>
+<script>
+    const aviationTypes = ["Rotor Wing", "Fixed Wing"];
+    const aviationStatuses = ["In Service", "Delayed Response", "Out of Service", "Off Forest", "Late Resource"];
+    const aviationLocations = ["Redmond", "Bend", "Prineville"];
+    const aviationResources = ["HELCO1", "HELCO2"];
+
+    function toggleEditMode() {
+      const saveSection = document.getElementById('saveButtons');
+      const toggle = document.getElementById('editToggle');
+      const editing = toggle.textContent.includes('Exit');
+      toggle.textContent = editing ? 'Enter Edit Mode' : 'Exit Edit Mode';
+      saveSection.style.display = editing ? 'none' : 'flex';
+    }
+
+    function createDropdown(options, className) {
+      const wrapper = document.createElement('div');
+      wrapper.style.display = 'flex';
+      wrapper.style.gap = '4px';
+
+      const select = document.createElement('select');
+      select.className = className + ' edit-input';
+      options.forEach(opt => {
+        const option = document.createElement('option');
+        option.value = opt;
+        option.textContent = opt;
+        select.appendChild(option);
+      });
+
+      const addBtn = document.createElement('button');
+      addBtn.textContent = '+';
+      addBtn.className = 'btn';
+      addBtn.style.padding = '2px 6px';
+      addBtn.onclick = () => {
+        const newOption = prompt('Enter new option:');
+        if (newOption) {
+          const newOptEl = document.createElement('option');
+          newOptEl.value = newOption;
+          newOptEl.textContent = newOption;
+          select.appendChild(newOptEl);
+          select.value = newOption;
+        }
+      };
+
+      wrapper.appendChild(select);
+      wrapper.appendChild(addBtn);
+      return wrapper;
+    }
+
+    function addAviationResourceRow() {
+      let table = document.querySelector('#aviation-container table');
+      if (!table) {
+        table = document.createElement('table');
+        const thead = document.createElement('thead');
+        thead.innerHTML = '<tr><th>Type</th><th>Resource</th><th>Status</th><th>Location</th><th>On/Off</th><th>Remove</th></tr>';
+        table.appendChild(thead);
+        const tbody = document.createElement('tbody');
+        table.appendChild(tbody);
+        document.getElementById('aviation-container').appendChild(table);
+      }
+      const row = document.createElement('tr');
+      const cells = [
+        createDropdown(aviationTypes, 'avi-type'),
+        createDropdown(aviationResources, 'avi-resource'),
+        createDropdown(aviationStatuses, 'avi-status'),
+        createDropdown(aviationLocations, 'avi-location'),
+        (() => {
+          const input = document.createElement('input');
+          input.type = 'text';
+          input.className = 'edit-input';
+          return input;
+        })(),
+        (() => {
+          const btn = document.createElement('button');
+          btn.className = 'btn';
+          btn.textContent = '🗑';
+          btn.onclick = () => row.remove();
+          return btn;
+        })()
+      ];
+      cells.forEach(cell => {
+        const td = document.createElement('td');
+        if (cell instanceof HTMLElement) td.appendChild(cell);
+        row.appendChild(td);
+      });
+      table.querySelector('tbody').appendChild(row);
+    }
+
+    function addDivisionResourceRow() {
+      let table = document.querySelector('#staffing-container table');
+      if (!table) {
+        table = document.createElement('table');
+        const thead = document.createElement('thead');
+        thead.innerHTML = '<tr><th>Resource Type</th><th>Leader</th><th>Status</th><th>Location</th><th>Remarks</th><th>Remove</th></tr>';
+        table.appendChild(thead);
+        const tbody = document.createElement('tbody');
+        table.appendChild(tbody);
+        document.getElementById('staffing-container').appendChild(table);
+      }
+      const row = document.createElement('tr');
+      const cells = [
+        createDropdown(["FMO", "Duty Officer", "BC", "Prevention", "Crew", "Engine"], 'div-type'),
+        (() => {
+          const input = document.createElement('input');
+          input.type = 'text';
+          input.className = 'edit-input';
+          return input;
+        })(),
+        createDropdown(["In Service", "Delayed Response", "Out of Service", "Off Forest", "Late Resource"], 'div-status'),
+        createDropdown(["Cascade", "Crescent", "Newberry East"], 'div-location'),
+        (() => {
+          const input = document.createElement('input');
+          input.type = 'text';
+          input.className = 'edit-input';
+          return input;
+        })(),
+        (() => {
+          const btn = document.createElement('button');
+          btn.className = 'btn';
+          btn.textContent = '🗑';
+          btn.onclick = () => row.remove();
+          return btn;
+        })()
+      ];
+      cells.forEach(cell => {
+        const td = document.createElement('td');
+        if (cell instanceof HTMLElement) td.appendChild(cell);
+        row.appendChild(td);
+      });
+      table.querySelector('tbody').appendChild(row);
+    }
+
+    function extractTableData(containerId, fields) {
+      const table = document.querySelector(`#${containerId} table tbody`);
+      if (!table) return [];
+      return Array.from(table.rows).map(row => {
+        const obj = {};
+        fields.forEach((field, i) => {
+          const input = row.cells[i].querySelector('select, input');
+          obj[field] = input ? input.value : '';
+        });
+        return obj;
+      });
+    }
+
+    function downloadJSON(type) {
+      let data = [];
+      if (type === 'aviation') {
+        data = extractTableData('aviation-container', ['type', 'resource', 'status', 'location', 'onoff']);
+      } else if (type === 'resources') {
+        data = extractTableData('staffing-container', ['resourceType', 'leader', 'status', 'location', 'remarks']);
+      } else if (type === 'individuals') {
+        data = []; // You could later attach individual editor data here
+      }
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `${type}.json`;
+      a.click();
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      addDivisionResourceRow();
+      addAviationResourceRow();
+    });
+  </script>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  fetch('aviation.json')
+    .then(res => res.json())
+    .then(data => {
+      data.forEach(entry => {
+        addAviationResourceRow(entry);
+      });
+    });
+
+  fetch('resources.json')
+    .then(res => res.json())
+    .then(data => {
+      data.forEach(entry => {
+        addDivisionResourceRow(entry);
+      });
+    });
+
+  fetch('individuals.json')
+    .then(res => res.json())
+    .then(data => {
+      window.sampleIndividuals = data;
+    });
+});
+
+function addAviationResourceRow(data = {}) {
+  let table = document.querySelector('#aviation-container table');
+  if (!table) {
+    table = document.createElement('table');
+    const thead = document.createElement('thead');
+    thead.innerHTML = '<tr><th>Type</th><th>Resource</th><th>Status</th><th>Location</th><th>On/Off</th><th>Remove</th></tr>';
+    table.appendChild(thead);
+    const tbody = document.createElement('tbody');
+    table.appendChild(tbody);
+    document.getElementById('aviation-container').appendChild(table);
+  }
+  const row = document.createElement('tr');
+  const fields = ['type', 'resource', 'status', 'location', 'onoff'];
+  const cells = fields.map((field, idx) => {
+    if (field === 'onoff') {
+      const input = document.createElement('input');
+      input.type = 'text';
+      input.className = 'edit-input';
+      input.value = data[field] || '';
+      return input;
+    } else {
+      const select = document.createElement('select');
+      select.className = 'edit-input';
+      ['Rotor Wing', 'Fixed Wing', 'HELCO1', 'HELCO2', 'In Service', 'Delayed Response', 'Out of Service', 'Off Forest', 'Late Resource', 'Redmond', 'Bend', 'Prineville'].forEach(opt => {
+        const o = document.createElement('option');
+        o.value = o.textContent = opt;
+        if (opt === data[field]) o.selected = true;
+        select.appendChild(o);
+      });
+      return select;
+    }
+  });
+
+  const removeBtn = document.createElement('button');
+  removeBtn.textContent = '🗑';
+  removeBtn.className = 'btn';
+  removeBtn.onclick = () => row.remove();
+
+  cells.forEach(cell => {
+    const td = document.createElement('td');
+    td.appendChild(cell);
+    row.appendChild(td);
+  });
+  const tdRemove = document.createElement('td');
+  tdRemove.appendChild(removeBtn);
+  row.appendChild(tdRemove);
+  table.querySelector('tbody').appendChild(row);
+}
+
+function addDivisionResourceRow(data = {}) {
+  let table = document.querySelector('#staffing-container table');
+  if (!table) {
+    table = document.createElement('table');
+    const thead = document.createElement('thead');
+    thead.innerHTML = '<tr><th>Resource Type</th><th>Leader</th><th>Status</th><th>Location</th><th>Remarks</th><th>Remove</th></tr>';
+    table.appendChild(thead);
+    const tbody = document.createElement('tbody');
+    table.appendChild(tbody);
+    document.getElementById('staffing-container').appendChild(table);
+  }
+
+  const row = document.createElement('tr');
+  const leaderInput = document.createElement('input');
+  leaderInput.className = 'edit-input';
+  leaderInput.value = data.leader || '';
+
+  const remarksInput = document.createElement('input');
+  remarksInput.className = 'edit-input';
+  remarksInput.value = data.remarks || '';
+
+  const createSelect = (value, options) => {
+    const select = document.createElement('select');
+    select.className = 'edit-input';
+    options.forEach(opt => {
+      const o = document.createElement('option');
+      o.value = o.textContent = opt;
+      if (opt === value) o.selected = true;
+      select.appendChild(o);
+    });
+    return select;
+  };
+
+  const typeSelect = createSelect(data.resourceType, ["FMO", "Duty Officer", "BC", "Prevention", "Crew", "Engine"]);
+  const statusSelect = createSelect(data.status, ["In Service", "Delayed Response", "Out of Service", "Off Forest", "Late Resource"]);
+  const locationSelect = createSelect(data.location, ["Cascade", "Crescent", "Newberry East"]);
+
+  const removeBtn = document.createElement('button');
+  removeBtn.textContent = '🗑';
+  removeBtn.className = 'btn';
+  removeBtn.onclick = () => row.remove();
+
+  const cells = [typeSelect, leaderInput, statusSelect, locationSelect, remarksInput];
+  cells.forEach(cell => {
+    const td = document.createElement('td');
+    td.appendChild(cell);
+    row.appendChild(td);
+  });
+
+  const tdRemove = document.createElement('td');
+  tdRemove.appendChild(removeBtn);
+  row.appendChild(tdRemove);
+  table.querySelector('tbody').appendChild(row);
+}
+</script></body>
+</html>

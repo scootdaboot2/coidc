@@ -1,0 +1,17 @@
+[
+  {
+    "First": "Jane",
+    "Last": "Smith",
+    "Phone": "541-555-1234",
+    "Phone2": "541-555-5678",
+    "Email": "jane.smith@example.com",
+    "Agency": "USFS",
+    "Unit": "COFMS",
+    "Location": "Cascade Division",
+    "Title": "USFS-IC",
+    "ICSRole": "AA",
+    "AssignedTo": "Crew 1",
+    "Lead": "Yes",
+    "Remarks": ""
+  }
+]

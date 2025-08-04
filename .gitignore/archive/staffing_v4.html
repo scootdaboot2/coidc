@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Central Oregon Staffing</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f8f8f8;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    .main-content {
+      display: flex;
+      gap: 20px;
+    }
+    .division-column {
+      flex: 2;
+    }
+    .aviation-column {
+      flex: 1;
+    }
+    .division-section, .aviation-table-section {
+      margin-bottom: 30px;
+      background: #fff;
+      padding: 10px;
+      border: 1px solid #ccc;
+    }
+    .division-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    .division-meta {
+      font-size: 0.9em;
+      text-align: right;
+    }
+    .division-table, .aviation-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    .division-table th, .division-table td,
+    .aviation-table th, .aviation-table td {
+      border: 1px solid #ddd;
+      padding: 6px 10px;
+      text-align: left;
+    }
+    .btn.update-btn {
+      margin-top: 10px;
+      padding: 6px 12px;
+      background: #777;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .edit-input {
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .add-btn, .save-btn {
+      background: #2e7d32;
+      color: #fff;
+      border: none;
+      padding: 4px 10px;
+      cursor: pointer;
+      margin: 6px 4px 6px 0;
+    }
+    .reload-btn {
+      background: #ff9800;
+      color: #fff;
+      padding: 6px 12px;
+      border: none;
+      margin: 4px;
+      cursor: pointer;
+    }
+    .status-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: #4caf50;
+      color: white;
+      text-align: center;
+      padding: 10px;
+      transform: translateY(-100%);
+      transition: transform 0.3s;
+      z-index: 1000;
+    }
+    .status-bar.show {
+      transform: translateY(0);
+    }
+    .status-bar.error {
+      background: #f44336;
+    }
+    .controls {
+      margin: 20px 0;
+      text-align: center;
+      background: #fff;
+      padding: 15px;
+      border: 1px solid #ccc;
+    }
+    .delete-btn {
+      background: #c62828;
+      color: #fff;
+      border: none;
+      padding: 4px 10px;
+      cursor: pointer;
+    }
+    .loading {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="status" class="status-bar"></div>
+  
+  <h1>Central Oregon Staffing</h1>
+  
+  <div class="controls">
+    <h3>Data Controls</h3>
+    <button class="reload-btn" onclick="loadAllData()">Reload from Server</button>
+    <span id="lastLoaded" style="margin-left: 20px; color: #666;"></span>
+  </div>
+
+  <div class="main-content">
+    <div id="staffing-container" class="division-column"></div>
+    <div id="aviation-container" class="aviation-column"></div>
+  </div>
+
+  <script>
+    // Data storage
+    let individualData = [];
+    let resourceData = [];
+    let aviationData = { "Rotor Wing": [], "Fixed Wing": [] };
+    
+    // API endpoint - adjust this path based on where you place the PHP file
+    const API_ENDPOINT = 'json_handler.php';
+
+    // Status display
+    function showStatus(message, isError = false) {
+      const status = document.getElementById('status');
+      status.textContent = message;
+      status.className = `status-bar show ${isError ? 'error' : ''}`;
+      setTimeout(() => {
+        status.classList.remove('show');
+      }, 3000);
+    }
+
+    // Loading state
+    function setLoading(element, loading) {
+      if (loading) {
+        element.classList.add('loading');
+      } else {
+        element.classList.remove('loading');
+      }
+    }
+
+    // Load data from server
+    async function loadJSONFile(filename) {
+      try {
+        const response = await fetch(`${API_ENDPOINT}?file=${filename}`);
+        if (!response.ok) {
+          throw new Error(`Failed to load ${filename}: ${response.statusText}`);
+        }
+        return await response.json();
+      } catch (error) {
+        console.error(`Error loading ${filename}:`, error);
+        showStatus(`Error loading ${filename}: ${error.message}`, true);
+        return null;
+      }
+    }
+
+    // Save data to server
+    async function saveJSONFile(filename, data) {
+      try {
+        const response = await fetch(API_ENDPOINT, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            file: filename,
+            data: data
+          })
+        });
+        
+        const result = await response.json();
+        
+        if (!response.ok) {
+          throw new Error(result.error || 'Save failed');
+        }
+        
+        showStatus(`${filename}.json saved successfully!`);
+        return true;
+      } catch (error) {
+        console.error(`Error saving ${filename}:`, error);
+        showStatus(`Error saving ${filename}: ${error.message}`, true);
+        return false;
+      }
+    }
+
+    // Load all data from server
+    async function loadAllData() {
+      const container = document.body;
+      setLoading(container, true);
+      
+      try {
+        const [individuals, resources, aviation] = await Promise.all([
+          loadJSONFile('individuals'),
+          loadJSONFile('resources'),
+          loadJSONFile('aviation')
+        ]);
+
+        if (individuals) individualData = individuals;
+        if (resources) resourceData = resources;
+        if (aviation) aviationData = aviation;
+
+        renderPage();
+        document.getElementById('lastLoaded').textContent = `Last loaded: ${new Date().toLocaleString()}`;
+        showStatus('Data loaded successfully from server');
+      } catch (error) {
+        showStatus('Error loading data from server', true);
+      } finally {
+        setLoading(container, false);
+      }
+    }
+
+    // Transform data for display
+    function getStaffingData() {
+      const divisionMap = new Map();
+      
+      individualData.forEach(person => {
+        const location = person.Location || 'Unassigned';
+        if (!divisionMap.has(location)) {
+          divisionMap.set(location, {
+            name: location,
+            dutyOfficer: '',
+            agencyAdmins: [],
+            lastModified: new Date().toLocaleString(),
+            resources: []
+          });
+        }
+        
+        const division = divisionMap.get(location);
+        if (person.ICSRole === 'AA' || person.Title.includes('IC')) {
+          division.dutyOfficer = `${person.First} ${person.Last}`;
+          division.agencyAdmins.push(`${person.First} ${person.Last} (${person.Phone}${person.Phone2 ? ' / ' + person.Phone2 : ''}, ${person.Email})`);
+        }
+      });
+
+      resourceData.forEach(resource => {
+        const location = resource.Location || 'Unassigned';
+        if (divisionMap.has(location)) {
+          divisionMap.get(location).resources.push({
+            type: resource.ResourceType,
+            name: resource.ResourceName,
+            leader: resource.Leader,
+            assigned: resource.Assigned,
+            status: resource.Status,
+            location: resource.Location,
+            remarks: resource.Remarks
+          });
+        }
+      });
+
+      const aviationResources = [];
+      Object.entries(aviationData).forEach(([type, resources]) => {
+        resources.forEach(resource => {
+          aviationResources.push({
+            type: type,
+            resource: resource.Resource,
+            status: resource.Status,
+            location: resource.Location,
+            onoff: resource.OnOff
+          });
+        });
+      });
+
+      return {
+        divisions: Array.from(divisionMap.values()),
+        aviation: aviationResources
+      };
+    }
+
+    function createEditableRow(resource) {
+      return `
+        <tr>
+          <td><input class="edit-input" value="${resource.type}" /></td>
+          <td><input class="edit-input" value="${resource.name}" /></td>
+          <td><input class="edit-input" value="${resource.leader}" /></td>
+          <td><input class="edit-input" type="number" value="${resource.assigned}" /></td>
+          <td><input class="edit-input" value="${resource.status}" /></td>
+          <td><input class="edit-input" value="${resource.location}" /></td>
+          <td><input class="edit-input" value="${resource.remarks}" /></td>
+          <td><button class="delete-btn" onclick="this.closest('tr').remove()">✖</button></td>
+        </tr>
+      `;
+    }
+
+    function toggleDivisionEdit(div, divisionData) {
+      const table = div.querySelector('table');
+      const tbody = table.querySelector('tbody');
+      tbody.innerHTML = divisionData.resources.map(res => createEditableRow(res)).join('');
+
+      const addBtn = document.createElement('button');
+      addBtn.className = 'add-btn';
+      addBtn.textContent = '+';
+      addBtn.onclick = () => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = createEditableRow({ type: '', name: '', leader: '', assigned: '', status: '', location: '', remarks: '' });
+        tbody.appendChild(tr);
+      };
+
+      const prevAdd = div.querySelector('.add-btn');
+      if (prevAdd) prevAdd.remove();
+      table.insertAdjacentElement('beforebegin', addBtn);
+      
+      const saveBtn = document.createElement('button');
+      saveBtn.className = 'save-btn';
+      saveBtn.textContent = 'Save to Server';
+      saveBtn.onclick = async () => {
+        setLoading(div, true);
+        
+        const updatedRows = [];
+        tbody.querySelectorAll('tr').forEach(row => {
+          const inputs = row.querySelectorAll('input');
+          if (inputs.length) {
+            updatedRows.push({
+              type: inputs[0].value,
+              name: inputs[1].value,
+              leader: inputs[2].value,
+              assigned: parseInt(inputs[3].value) || 0,
+              status: inputs[4].value,
+              location: inputs[5].value,
+              remarks: inputs[6].value
+            });
+          }
+        });
+
+        // Update the resourceData array
+        resourceData = resourceData.filter(r => r.Location !== divisionData.name);
+        updatedRows.forEach(row => {
+          if (row.name) { // Only add if name is not empty
+            resourceData.push({
+              ResourceType: row.type,
+              ResourceName: row.name,
+              Leader: row.leader,
+              Assigned: row.assigned,
+              Status: row.status,
+              Location: row.location,
+              Remarks: row.remarks
+            });
+          }
+        });
+
+        const success = await saveJSONFile('resources', resourceData);
+        if (success) {
+          renderPage();
+        }
+        
+        setLoading(div, false);
+      };
+
+      div.appendChild(saveBtn);
+    }
+
+    function createEditableAviationRow(resource) {
+      return `
+        <tr>
+          <td><input class="edit-input" value="${resource.type}" /></td>
+          <td><input class="edit-input" value="${resource.resource}" /></td>
+          <td><input class="edit-input" value="${resource.status}" /></td>
+          <td><input class="edit-input" value="${resource.location}" /></td>
+          <td><input class="edit-input" value="${resource.onoff}" /></td>
+          <td><button class="delete-btn" onclick="this.closest('tr').remove()">✖</button></td>
+        </tr>
+      `;
+    }
+
+    function toggleAviationEdit() {
+      const aviationEl = document.getElementById('aviation-container');
+      aviationEl.innerHTML = '';
+
+      const section = document.createElement('div');
+      section.className = 'aviation-section';
+      section.innerHTML = '<h2>Aviation Resources (Edit Mode)</h2>';
+
+      const currentData = getStaffingData().aviation;
+      
+      ['Rotor Wing', 'Fixed Wing'].forEach(type => {
+        const data = currentData.filter(r => r.type === type);
+        const wrapper = document.createElement('div');
+        wrapper.className = 'aviation-table-section';
+
+        const table = document.createElement('table');
+        table.className = 'aviation-table';
+        table.innerHTML = `
+          <thead><tr><th colspan="6">${type}</th></tr>
+          <tr><th>Type</th><th>Resource</th><th>Status</th><th>Location</th><th>On/Off</th><th></th></tr></thead>
+          <tbody>
+            ${data.map(row => createEditableAviationRow(row)).join('')}
+          </tbody>
+        `;
+
+        const addBtn = document.createElement('button');
+        addBtn.className = 'add-btn';
+        addBtn.textContent = '+';
+        addBtn.onclick = () => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = createEditableAviationRow({ type: type, resource: '', status: '', location: '', onoff: '' });
+          table.querySelector('tbody').appendChild(tr);
+        };
+
+        wrapper.appendChild(addBtn);
+        wrapper.appendChild(table);
+        section.appendChild(wrapper);
+      });
+
+      const saveBtn = document.createElement('button');
+      saveBtn.className = 'save-btn';
+      saveBtn.textContent = 'Save to Server';
+      saveBtn.onclick = async () => {
+        setLoading(section, true);
+        
+        const newAviationData = { "Rotor Wing": [], "Fixed Wing": [] };
+        
+        section.querySelectorAll('tbody tr').forEach(row => {
+          const inputs = row.querySelectorAll('input');
+          if (inputs.length && inputs[1].value) {
+            const type = inputs[0].value;
+            const resource = {
+              Type: type === 'Rotor Wing' ? 'HEL T1' : 'SEAT',
+              Resource: inputs[1].value,
+              Status: inputs[2].value,
+              Location: inputs[3].value,
+              OnOff: inputs[4].value
+            };
+            
+            if (type === 'Rotor Wing') {
+              newAviationData["Rotor Wing"].push(resource);
+            } else {
+              newAviationData["Fixed Wing"].push(resource);
+            }
+          }
+        });
+
+        aviationData = newAviationData;
+        const success = await saveJSONFile('aviation', aviationData);
+        if (success) {
+          renderPage();
+        }
+        
+        setLoading(section, false);
+      };
+
+      section.appendChild(saveBtn);
+      aviationEl.appendChild(section);
+    }
+
+    function createDivisionSection(division) {
+      const div = document.createElement('div');
+      div.className = 'division-section';
+      div.dataset.division = division.name;
+
+      const header = document.createElement('div');
+      header.className = 'division-header';
+      header.innerHTML = `
+        <h2>${division.name}</h2>
+        <div class="division-meta">
+          <strong>Duty Officer:</strong> ${division.dutyOfficer || 'None Assigned'}<br>
+          <strong>Agency Admin(s):</strong> ${division.agencyAdmins?.join(', ') || 'None Assigned'}<br>
+          <small>Last Modified: ${division.lastModified}</small>
+        </div>
+      `;
+
+      const updateBtn = document.createElement('button');
+      updateBtn.className = 'btn update-btn';
+      updateBtn.textContent = 'Update Section';
+      updateBtn.onclick = () => toggleDivisionEdit(div, division);
+
+      const table = document.createElement('table');
+      table.className = 'division-table';
+      table.innerHTML = `
+        <thead>
+          <tr>
+            <th>Type</th><th>Name</th><th>Leader</th><th># Assigned</th><th>Status</th><th>Location</th><th>Remarks</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${division.resources.map(res => `
+            <tr>
+              <td>${res.type}</td>
+              <td>${res.name}</td>
+              <td>${res.leader}</td>
+              <td>${res.assigned}</td>
+              <td>${res.status}</td>
+              <td>${res.location}</td>
+              <td>${res.remarks}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      `;
+
+      div.appendChild(header);
+      div.appendChild(updateBtn);
+      div.appendChild(table);
+      return div;
+    }
+
+    function createAviationSection() {
+      const container = document.createElement('div');
+      container.className = 'aviation-section';
+
+      const editBtn = document.createElement('button');
+      editBtn.className = 'btn update-btn';
+      editBtn.textContent = 'Edit Aviation';
+      editBtn.onclick = () => toggleAviationEdit();
+
+      const currentData = getStaffingData().aviation;
+      const rotorWing = currentData.filter(r => r.type === 'Rotor Wing');
+      const fixedWing = currentData.filter(r => r.type === 'Fixed Wing');
+
+      container.innerHTML = '<h2>Aviation Resources</h2>';
+      container.appendChild(editBtn);
+      container.appendChild(createAviationTable('Rotor Wing', rotorWing));
+      container.appendChild(createAviationTable('Fixed Wing', fixedWing));
+      return container;
+    }
+
+    function createAviationTable(title, data) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'aviation-table-section';
+
+      const table = document.createElement('table');
+      table.className = 'aviation-table';
+      table.innerHTML = `
+        <thead><tr><th colspan="5">${title}</th></tr>
+        <tr><th>Type</th><th>Resource</th><th>Status</th><th>Location</th><th>On/Off</th></tr></thead>
+        <tbody>
+          ${data.map(row => `
+            <tr>
+              <td>${row.type}</td>
+              <td>${row.resource}</td>
+              <td>${row.status}</td>
+              <td>${row.location}</td>
+              <td>${row.onoff}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      `;
+
+      wrapper.appendChild(table);
+      return wrapper;
+    }
+
+    function renderPage() {
+      const staffingData = getStaffingData();
+      
+      const staffingEl = document.getElementById('staffing-container');
+      staffingEl.innerHTML = '';
+      staffingData.divisions.forEach(div => {
+        staffingEl.appendChild(createDivisionSection(div));
+      });
+
+      const aviationEl = document.getElementById('aviation-container');
+      aviationEl.innerHTML = '';
+      aviationEl.appendChild(createAviationSection());
+    }
+
+    // Initialize on page load
+    window.addEventListener('load', () => {
+      loadAllData();
+    });
+  </script>
+</body>
+</html>

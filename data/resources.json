@@ -1,0 +1,1208 @@
+[
+  {
+    "type": "FMO",
+    "name": "OR-DEF-DV4",
+    "leader": "Gregg",
+    "assigned": 0,
+    "status": "Out of Service",
+    "location": "Cascade",
+    "remarks": "ICT3"
+  },
+  {
+    "type": "Duty Officer",
+    "name": "OR-DEF-BC41",
+    "leader": "Smith-Howard",
+    "assigned": 0,
+    "status": "In Service",
+    "location": "Cascade",
+    "remarks": "ICT4"
+  },
+  {
+    "type": "BC",
+    "name": "OR-DEF-BC42",
+    "leader": "Gottfried",
+    "assigned": 0,
+    "status": "Out of Service",
+    "location": "Cascade",
+    "remarks": "ICT3"
+  },
+  {
+    "type": "BC",
+    "name": "OR-DEF-BC43",
+    "leader": "Garcia",
+    "assigned": 0,
+    "status": "Out of Service",
+    "location": "Cascade",
+    "remarks": "ICT4"
+  },
+  {
+    "type": "Operations",
+    "name": "OR-DEF-OPS41",
+    "leader": "Salsky",
+    "assigned": 0,
+    "status": "Committed",
+    "location": "Cascade",
+    "remarks": "Gray Team"
+  },
+  {
+    "type": "Prevention Tech",
+    "name": "OR-DEF-PT41",
+    "leader": "Price",
+    "assigned": 0,
+    "status": "Delayed Response",
+    "location": "Cascade",
+    "remarks": "Deschutes County Fair"
+  },
+  {
+    "type": "Overhead",
+    "name": "OR-DEF-OPS42",
+    "leader": "Harris",
+    "assigned": 0,
+    "status": "In Service",
+    "location": "Cascade",
+    "remarks": "ICCI LWD 8/5"
+  },
+  {
+    "type": "Overhead",
+    "name": "",
+    "leader": "",
+    "assigned": 0,
+    "status": "Out of Service",
+    "location": "Cascade",
+    "remarks": "ICT4"
+  },
+  {
+    "type": "Fuels Tech",
+    "name": "OR-DEF-FT41",
+    "leader": "",
+    "assigned": 0,
+    "status": "Out of Service",
+    "location": "Cascade",
+    "remarks": ""
+  },
+  {
+    "type": "Fuels Tech",
+    "name": "OR-DEF-FT42",
+    "leader": "Wood",
+    "assigned": 0,
+    "status": "Committed",
+    "location": "Cascade",
+    "remarks": "ICT4 Stevens"
+  },
+  {
+    "type": "Fuels Tech",
+    "name": "OR-DEF-FT43",
+    "leader": "Pyke",
+    "assigned": 0,
+    "status": "Out of Service",
+    "location": "Cascade",
+    "remarks": "Prineville HB"
+  },
+  {
+    "type": "T3 Engine",
+    "name": "OR-DEF-E341",
+    "leader": "Burns",
+    "assigned": 3,
+    "status": "Out of Service",
+    "location": "Cascade",
+    "remarks": "OOS mechanical at 1200"
+  },
+  {
+    "type": "T6 Engine",
+    "name": "OR-DEF-E640",
+    "leader": "Bartkowiak",
+    "assigned": 8,
+    "status": "In Service",
+    "location": "Cascade",
+    "remarks": "ICT4"
+  },
+  {
+    "type": "Crew Module",
+    "name": "OR-DEF-C401",
+    "leader": "Fair",
+    "assigned": 9,
+    "status": "Out of Service",
+    "location": "Cascade",
+    "remarks": "Burdoin Fire"
+  },
+  {
+    "type": "T6 Engine",
+    "name": "Mark Twain E-631",
+    "leader": "",
+    "assigned": 3,
+    "status": "Out of Service",
+    "location": "4-Aug - Cascade",
+    "remarks": "Down Mechanical-Chasing E640"
+  },
+  {
+    "type": "T2 IA Handcrew",
+    "name": "Patrick C-1 18-A",
+    "leader": "Chris Ferrara",
+    "assigned": 20,
+    "status": "In Service",
+    "location": "13-Aug - Cascade",
+    "remarks": ""
+  },
+  {
+    "type": "T3 Pumpercat",
+    "name": "E-16 Clearwater",
+    "leader": "Bruce Card",
+    "assigned": 1,
+    "status": "In Service",
+    "location": "Cascade",
+    "remarks": ""
+  },
+  {
+    "type": "T4 Engine",
+    "name": "Patrick E-15",
+    "leader": "Bill Murphy",
+    "assigned": 3,
+    "status": "Committed",
+    "location": "8-Aug - Cascade",
+    "remarks": "Stevens 950 gallons PTO"
+  },
+  {
+    "type": "Crew Module",
+    "name": "Rio Puerco WFM",
+    "leader": "Tanner Laird",
+    "assigned": 8,
+    "status": "Committed",
+    "location": "15-Aug - Cascade",
+    "remarks": "Stevens T2 WFM with UTV"
+  },
+  {
+    "type": "T3 Engine",
+    "name": "MHF - 311",
+    "leader": "John Bitzberger",
+    "assigned": 6,
+    "status": "In Service",
+    "location": "9-Aug - Cascade",
+    "remarks": "ICT4, TFLD, HEQB"
+  },
+  {
+    "type": "Prevention Tech",
+    "name": "PT-47",
+    "leader": "Thomas Sousa",
+    "assigned": 1,
+    "status": "In Service",
+    "location": "Cascade",
+    "remarks": ""
+  },
+  {
+    "type": "Operations",
+    "name": "OR-DEF-OPS51",
+    "leader": "Leidenfrost",
+    "assigned": 0,
+    "status": "In Service",
+    "location": "Crescent",
+    "remarks": ""
+  },
+  {
+    "type": "Prevention Tech",
+    "name": "OR-DEF-PT51",
+    "leader": "DaMotta",
+    "assigned": 0,
+    "status": "In Service",
+    "location": "Crescent",
+    "remarks": ""
+  },
+  {
+    "type": "T3 Engine",
+    "name": "OR-DEF-E351",
+    "leader": "Dawson",
+    "assigned": 3,
+    "status": "In Service",
+    "location": "Crescent",
+    "remarks": ""
+  },
+  {
+    "type": "T6 Engine",
+    "name": "OR-DEF-E652",
+    "leader": "Smith",
+    "assigned": 3,
+    "status": "In Service",
+    "location": "Crescent",
+    "remarks": ""
+  },
+  {
+    "type": "T6 Engine",
+    "name": "OR-DEF-E653",
+    "leader": "Boyd",
+    "assigned": 5,
+    "status": "Out of Service",
+    "location": "Crescent",
+    "remarks": "R&R"
+  },
+  {
+    "type": "",
+    "name": "",
+    "leader": "",
+    "assigned": 0,
+    "status": "Out of Service",
+    "location": "Crescent",
+    "remarks": ""
+  },
+  {
+    "type": "",
+    "name": "",
+    "leader": "",
+    "assigned": 0,
+    "status": "Out of Service",
+    "location": "Crescent",
+    "remarks": ""
+  },
+  {
+    "type": "Crew Module",
+    "name": "OR-DEF-C501",
+    "leader": "Schwartz",
+    "assigned": 4,
+    "status": "Out of Service",
+    "location": "Crescent",
+    "remarks": ""
+  },
+  {
+    "type": "Crew Module",
+    "name": "OR-DEF-C501A",
+    "leader": "Schwartz",
+    "assigned": 4,
+    "status": "In Service",
+    "location": "Crescent",
+    "remarks": ""
+  },
+  {
+    "type": "Crew Module",
+    "name": "OR-DEF-C501B",
+    "leader": "",
+    "assigned": 0,
+    "status": "Out of Service",
+    "location": "Crescent",
+    "remarks": ""
+  },
+  {
+    "type": "Lookout",
+    "name": "Odell Butte",
+    "leader": "Lookout Phone",
+    "assigned": 0,
+    "status": "In Service",
+    "location": "Crescent",
+    "remarks": ""
+  },
+  {
+    "type": "Fuels Tech",
+    "name": "OR-DEF-FT53",
+    "leader": "Ochoa",
+    "assigned": 0,
+    "status": "Out of Service",
+    "location": "Crescent",
+    "remarks": ""
+  },
+  {
+    "type": "Fuels Tech",
+    "name": "OR-DEF-FT54",
+    "leader": "Dufurrena",
+    "assigned": 0,
+    "status": "Out of Service",
+    "location": "Crescent",
+    "remarks": "R&R"
+  },
+  {
+    "type": "Fuels Tech",
+    "name": "OR-DEF-FT55",
+    "leader": "Odell",
+    "assigned": 0,
+    "status": "Out of Service",
+    "location": "Crescent",
+    "remarks": "R&R"
+  },
+  {
+    "type": "Overhead",
+    "name": "Overhead",
+    "leader": "Leidenfrost",
+    "assigned": 1,
+    "status": "In Service",
+    "location": "Crescent",
+    "remarks": ""
+  },
+  {
+    "type": "Overhead",
+    "name": "Overhead",
+    "leader": "McGuire",
+    "assigned": 0,
+    "status": "In Service",
+    "location": "Crescent",
+    "remarks": ""
+  },
+  {
+    "type": "T6 Engine",
+    "name": "TX-671",
+    "leader": "Danny Harris ENGB(t)",
+    "assigned": 4,
+    "status": "In Service",
+    "location": "Crescent",
+    "remarks": ""
+  },
+  {
+    "type": "Duty Officer",
+    "name": "BC-62",
+    "leader": "Brian German",
+    "assigned": 1,
+    "status": "In Service",
+    "location": "3-Aug - Crescent",
+    "remarks": ""
+  },
+  {
+    "type": "",
+    "name": "",
+    "leader": "",
+    "assigned": 0,
+    "status": "Out of Service",
+    "location": "Crescent",
+    "remarks": ""
+  },
+  {
+    "type": "T6 Engine",
+    "name": "KY-LBF-E601",
+    "leader": "Doug Hutnick",
+    "assigned": 4,
+    "status": "In Service - Late Resource",
+    "location": "25-Jul - Crescent",
+    "remarks": ""
+  },
+  {
+    "type": "FMO",
+    "name": "OR-DEF-DV3",
+    "leader": "McCain -",
+    "assigned": 1,
+    "status": "Out of Service",
+    "location": "Newberry West",
+    "remarks": ""
+  },
+  {
+    "type": "BC",
+    "name": "OR-DEF-BC32",
+    "leader": "Durrant -",
+    "assigned": 0,
+    "status": "In Service",
+    "location": "Newberry West",
+    "remarks": ""
+  },
+  {
+    "type": "Duty Officer",
+    "name": "OR-DEF-OPS32",
+    "leader": "Fielder -",
+    "assigned": 1,
+    "status": "In Service",
+    "location": "Newberry West",
+    "remarks": ""
+  },
+  {
+    "type": "Overhead",
+    "name": "OR-DEF-BC34",
+    "leader": "Duke -",
+    "assigned": 1,
+    "status": "In Service",
+    "location": "Newberry West",
+    "remarks": "OH EAST/ WEST"
+  },
+  {
+    "type": "T3 Engine",
+    "name": "OR-DEF-E330",
+    "leader": "Wold -",
+    "assigned": 5,
+    "status": "In Service",
+    "location": "Newberry West",
+    "remarks": ""
+  },
+  {
+    "type": "T6 Engine",
+    "name": "OR-DEF-E636",
+    "leader": "McKeehan -",
+    "assigned": 4,
+    "status": "In Service",
+    "location": "Newberry West",
+    "remarks": "0800-2000"
+  },
+  {
+    "type": "T6 Engine",
+    "name": "OR-DEF-E637",
+    "leader": "Cahill -",
+    "assigned": 4,
+    "status": "In Service",
+    "location": "Newberry West",
+    "remarks": "Inc 691 in AM"
+  },
+  {
+    "type": "Crew Module",
+    "name": "OR-DEF-C302A",
+    "leader": "Foey -",
+    "assigned": 7,
+    "status": "Out of Service",
+    "location": "Newberry West",
+    "remarks": ""
+  },
+  {
+    "type": "Dozer",
+    "name": "OR-DEF-D231",
+    "leader": "Walker -",
+    "assigned": 2,
+    "status": "In Service",
+    "location": "Newberry West",
+    "remarks": ""
+  },
+  {
+    "type": "Prevention Tech",
+    "name": "OR-DEF-PT32",
+    "leader": "Fisher -",
+    "assigned": 1,
+    "status": "Out of Service",
+    "location": "Newberry West",
+    "remarks": ""
+  },
+  {
+    "type": "Lookout",
+    "name": "Round Mountain",
+    "leader": "",
+    "assigned": 0,
+    "status": "In Service",
+    "location": "Newberry West",
+    "remarks": "7-day coverage: 0900-2000"
+  },
+  {
+    "type": "Lookout",
+    "name": "Lava Butte",
+    "leader": "",
+    "assigned": 0,
+    "status": "In Service",
+    "location": "Newberry West",
+    "remarks": "7-day coverage: 0900-2000"
+  },
+  {
+    "type": "BC",
+    "name": "OR-DEF-BC33",
+    "leader": "Creech -",
+    "assigned": 1,
+    "status": "Out of Service",
+    "location": "Newberry West",
+    "remarks": ""
+  },
+  {
+    "type": "BC",
+    "name": "OR-DEF-BC34",
+    "leader": "Duke -",
+    "assigned": 0,
+    "status": "In Service",
+    "location": "Newberry West",
+    "remarks": ""
+  },
+  {
+    "type": "BC",
+    "name": "OR-DEF-BC35",
+    "leader": "Kuntz -",
+    "assigned": 0,
+    "status": "Off Forest",
+    "location": "Newberry West",
+    "remarks": "Detailed R5 for season"
+  },
+  {
+    "type": "BC",
+    "name": "OR-DEF-BC36",
+    "leader": "Crawford -",
+    "assigned": 1,
+    "status": "Out of Service",
+    "location": "Newberry West",
+    "remarks": ""
+  },
+  {
+    "type": "Fuels Tech",
+    "name": "OR-DEF-FT31",
+    "leader": "Cuffe",
+    "assigned": 1,
+    "status": "Out of Service",
+    "location": "Newberry West",
+    "remarks": ""
+  },
+  {
+    "type": "Fuels Tech",
+    "name": "OR-DEF-FT32",
+    "leader": "Loewen -",
+    "assigned": 0,
+    "status": "Out of Service",
+    "location": "Newberry West",
+    "remarks": ""
+  },
+  {
+    "type": "Fuels Tech",
+    "name": "OR-DEF-FT33",
+    "leader": "Carroll",
+    "assigned": 0,
+    "status": "Out of Service",
+    "location": "Newberry West",
+    "remarks": ""
+  },
+  {
+    "type": "Fuels Tech",
+    "name": "OR-DEF-FT34",
+    "leader": "Leonard -",
+    "assigned": 0,
+    "status": "Out of Service",
+    "location": "Newberry West",
+    "remarks": ""
+  },
+  {
+    "type": "Duty Officer",
+    "name": "OR-DEF-BC31",
+    "leader": "Babb -",
+    "assigned": 1,
+    "status": "Out of Service",
+    "location": "Newberry East",
+    "remarks": ""
+  },
+  {
+    "type": "Operations",
+    "name": "OR-DEF-BC31",
+    "leader": "Carroll",
+    "assigned": 1,
+    "status": "In Service",
+    "location": "Newberry East",
+    "remarks": ""
+  },
+  {
+    "type": "Overhead",
+    "name": "OR-DEF-BC34",
+    "leader": "Duke -",
+    "assigned": 1,
+    "status": "In Service",
+    "location": "Newberry East",
+    "remarks": "OH EAST/ WEST"
+  },
+  {
+    "type": "T3 Engine",
+    "name": "OR-DEF-E331",
+    "leader": "Witherspoon -",
+    "assigned": 5,
+    "status": "In Service",
+    "location": "Newberry East",
+    "remarks": "0800-2000"
+  },
+  {
+    "type": "T3 Engine",
+    "name": "OR-DEF-E332",
+    "leader": "Natchke -",
+    "assigned": 5,
+    "status": "In Service",
+    "location": "Newberry East",
+    "remarks": ""
+  },
+  {
+    "type": "T6 Engine",
+    "name": "OR-DEF-E634",
+    "leader": "Hamman -",
+    "assigned": 4,
+    "status": "In Service",
+    "location": "Newberry East",
+    "remarks": ""
+  },
+  {
+    "type": "T6 Engine",
+    "name": "OR-DEF-E635",
+    "leader": "Slepukhin -",
+    "assigned": 4,
+    "status": "Off Forest",
+    "location": "Newberry East",
+    "remarks": "ID McCall"
+  },
+  {
+    "type": "Crew Module",
+    "name": "OR-DEF-C301",
+    "leader": "",
+    "assigned": 6,
+    "status": "Out of Service",
+    "location": "Newberry East",
+    "remarks": ""
+  },
+  {
+    "type": "Dozer",
+    "name": "OR-DEF-D230",
+    "leader": "Hauswald-",
+    "assigned": 1,
+    "status": "Out of Service",
+    "location": "Newberry East",
+    "remarks": ""
+  },
+  {
+    "type": "Prevention Tech",
+    "name": "OR-DEF-FT31",
+    "leader": "Artley -",
+    "assigned": 1,
+    "status": "Out of Service",
+    "location": "Newberry East",
+    "remarks": ""
+  },
+  {
+    "type": "Lookout",
+    "name": "East Butte",
+    "leader": "",
+    "assigned": 0,
+    "status": "In Service",
+    "location": "Newberry East",
+    "remarks": "7 day 0800-2000"
+  },
+  {
+    "type": "Lookout",
+    "name": "Spring Butte",
+    "leader": "",
+    "assigned": 0,
+    "status": "Out of Service",
+    "location": "Newberry East",
+    "remarks": "Out of service for season"
+  },
+  {
+    "type": "Water Tender",
+    "name": "E-1 All Terrain",
+    "leader": "John Erwert -",
+    "assigned": 1,
+    "status": "In Service",
+    "location": "9-Aug - Newberry East",
+    "remarks": "0800-2000"
+  },
+  {
+    "type": "DZIA",
+    "name": "DZIA Operator",
+    "leader": "Todd Walker-",
+    "assigned": 2,
+    "status": "In Service",
+    "location": "8-Aug - Newberry East",
+    "remarks": "Staffing DZ231"
+  },
+  {
+    "type": "T6 Engine",
+    "name": "Montana E-671",
+    "leader": "Jack Brydon",
+    "assigned": 4,
+    "status": "In Service",
+    "location": "6-Aug - Newberry East",
+    "remarks": "0800-2000"
+  },
+  {
+    "type": "Prevention",
+    "name": "Patrol 4",
+    "leader": "Tim Gomez -",
+    "assigned": 1,
+    "status": "In Service",
+    "location": "12-Aug - Newberry East",
+    "remarks": "0800-2000"
+  },
+  {
+    "type": "Fire Staff",
+    "name": "OR-PRD-CH5101",
+    "leader": "James Osborne",
+    "assigned": 1,
+    "status": "In Service",
+    "location": "Rivers",
+    "remarks": "Prineville ICT3"
+  },
+  {
+    "type": "Fire Staff",
+    "name": "OR-PRD-CH5102",
+    "leader": "James Purswell -",
+    "assigned": 1,
+    "status": "Out of Service",
+    "location": "Rivers",
+    "remarks": "Prineville ICT3 / FMO"
+  },
+  {
+    "type": "Fire Staff",
+    "name": "OR-PRD-CH5103",
+    "leader": "Jona Ensley",
+    "assigned": 1,
+    "status": "Out of Service",
+    "location": "Rivers",
+    "remarks": "Prineville"
+  },
+  {
+    "type": "BC - Trespass",
+    "name": "OR-PRD-BC5120",
+    "leader": "Sheldon Rhoden-",
+    "assigned": 1,
+    "status": "In Service",
+    "location": "Rivers",
+    "remarks": "Prineville ICT4 / INVF"
+  },
+  {
+    "type": "BC",
+    "name": "OR-PRD-BC5122",
+    "leader": "Adam Barnes -",
+    "assigned": 1,
+    "status": "In Service",
+    "location": "Rivers",
+    "remarks": "Prineville ICT3"
+  },
+  {
+    "type": "BC",
+    "name": "OR-PRD-BC5121",
+    "leader": "Aaron Roggenkamp",
+    "assigned": 1,
+    "status": "In Service",
+    "location": "Rivers",
+    "remarks": "Prineville ICT3"
+  },
+  {
+    "type": "BC",
+    "name": "OR-PRD-BC5123",
+    "leader": "Jamie Schnick -",
+    "assigned": 1,
+    "status": "Out of Service",
+    "location": "Rivers",
+    "remarks": "Prineville / ICT3 (T)"
+  },
+  {
+    "type": "BC",
+    "name": "OR-PRD-BC5124",
+    "leader": "Tavis Fenske -",
+    "assigned": 1,
+    "status": "Out of Service",
+    "location": "Rivers",
+    "remarks": "Prineville ICT3"
+  },
+  {
+    "type": "BC",
+    "name": "OR-PRD-BC5127",
+    "leader": "Rory Hiett -",
+    "assigned": 1,
+    "status": "Out of Service",
+    "location": "Rivers",
+    "remarks": "Prineville ICT3(T)"
+  },
+  {
+    "type": "BC",
+    "name": "OR-PRD-BC5128",
+    "leader": "Adam Ernst-",
+    "assigned": 1,
+    "status": "Out of Service",
+    "location": "Rivers",
+    "remarks": "Prineville/ ICT3"
+  },
+  {
+    "type": "Prevention",
+    "name": "OR-PRD-PT-5520",
+    "leader": "Jon Lent -",
+    "assigned": 1,
+    "status": "Out of Service",
+    "location": "Rivers",
+    "remarks": "Prineville ICT4 / INVF"
+  },
+  {
+    "type": "BC",
+    "name": "OR-PRD-BC5125",
+    "leader": "Rob Fore -",
+    "assigned": 1,
+    "status": "In Service",
+    "location": "Rivers",
+    "remarks": "Prineville / ICT3/ Acting FMO"
+  },
+  {
+    "type": "Fuels Tech",
+    "name": "OR-PRD-FT5521",
+    "leader": "Ashlee Bushnell -",
+    "assigned": 1,
+    "status": "Off Forest",
+    "location": "Rivers",
+    "remarks": "EOTF- WA"
+  },
+  {
+    "type": "T4 Engine",
+    "name": "OR-PRD-E5420",
+    "leader": "",
+    "assigned": 4,
+    "status": "Out of Service",
+    "location": "Rivers",
+    "remarks": "Prineville"
+  },
+  {
+    "type": "T6 Engine",
+    "name": "OR-PRD-E5624",
+    "leader": "Matt Noss -",
+    "assigned": 3,
+    "status": "In Service",
+    "location": "Rivers",
+    "remarks": "Prineville/ ICT3"
+  },
+  {
+    "type": "T6 Engine",
+    "name": "OR-PRD-E5626",
+    "leader": "Zach Spencer -",
+    "assigned": 3,
+    "status": "In Service",
+    "location": "Rivers",
+    "remarks": "Prineville"
+  },
+  {
+    "type": "T4 Engine",
+    "name": "OR-PRD-E5423",
+    "leader": "Jeff Luebbers -",
+    "assigned": 3,
+    "status": "In Service",
+    "location": "Rivers",
+    "remarks": "Madras ICT4"
+  },
+  {
+    "type": "T6 Engine",
+    "name": "OR-PRD-E5628",
+    "leader": "Elliott Wharton -",
+    "assigned": 3,
+    "status": "In Service",
+    "location": "Rivers",
+    "remarks": "Prineville"
+  },
+  {
+    "type": "T6 Engine",
+    "name": "OR-PRD-E5625",
+    "leader": "Jim Holmly -",
+    "assigned": 2,
+    "status": "In Service",
+    "location": "Rivers",
+    "remarks": "Prineville"
+  },
+  {
+    "type": "T6 Engine",
+    "name": "OR-PRD-E5621",
+    "leader": "Justin Ritschard -",
+    "assigned": 4,
+    "status": "Out of Service",
+    "location": "Rivers",
+    "remarks": "Prineville"
+  },
+  {
+    "type": "T4 Engine",
+    "name": "OR-PRD-E5427",
+    "leader": "Tim Kenny",
+    "assigned": 2,
+    "status": "In Service",
+    "location": "Rivers",
+    "remarks": "Grass Valley"
+  },
+  {
+    "type": "T4 Engine",
+    "name": "OR-PRD-E5422",
+    "leader": "Sean Dahlberg -",
+    "assigned": 2,
+    "status": "Off Forest",
+    "location": "Rivers",
+    "remarks": "EOTF- WA"
+  },
+  {
+    "type": "T6 Engine",
+    "name": "Shawnee 641",
+    "leader": "Cody Mann",
+    "assigned": 3,
+    "status": "In Service",
+    "location": "10-Aug - Rivers",
+    "remarks": "Prineville"
+  },
+  {
+    "type": "Water Tender",
+    "name": "M&D E-8",
+    "leader": "Jim Hamm",
+    "assigned": 1,
+    "status": "In Service",
+    "location": "8-Aug - Rivers",
+    "remarks": "Prineville"
+  },
+  {
+    "type": "T6 Engine",
+    "name": "Bull Creek 612",
+    "leader": "Kyle Baker",
+    "assigned": 8,
+    "status": "In Service",
+    "location": "4-Aug - Rivers",
+    "remarks": "Prineville"
+  },
+  {
+    "type": "Type 2 Hand Crew",
+    "name": "C-1 Patrick",
+    "leader": "Quentin Johnson",
+    "assigned": 20,
+    "status": "Committed",
+    "location": "Rivers",
+    "remarks": ""
+  },
+  {
+    "type": "BC",
+    "name": "Jeff Finley",
+    "leader": "Jeff Finley",
+    "assigned": 1,
+    "status": "In Service",
+    "location": "2-Aug - Rivers",
+    "remarks": "Prineville"
+  },
+  {
+    "type": "Overhead",
+    "name": "OPS - 93",
+    "leader": "Phil Oosawhee",
+    "assigned": 1,
+    "status": "In Service",
+    "location": "Rivers",
+    "remarks": "Prineville / ICT3 (T)"
+  },
+  {
+    "type": "Overhead",
+    "name": "OPS-92",
+    "leader": "Erick Stahlin",
+    "assigned": 1,
+    "status": "In Service",
+    "location": "Rivers",
+    "remarks": "Prineville ICT3"
+  },
+  {
+    "type": "T6 Engine",
+    "name": "OR-OCF-E612",
+    "leader": "",
+    "assigned": 5,
+    "status": "Out of Service",
+    "location": "Prairie",
+    "remarks": "Mechanical"
+  },
+  {
+    "type": "T6 Engine",
+    "name": "OR-OCF-E616",
+    "leader": "Pepe Delgado",
+    "assigned": 4,
+    "status": "Off Forest",
+    "location": "Prairie",
+    "remarks": "CUSTER / GALITAN"
+  },
+  {
+    "type": "T6 Engine",
+    "name": "OR-OCF-E618",
+    "leader": "Dustin Silvey",
+    "assigned": 5,
+    "status": "In Service",
+    "location": "Prairie",
+    "remarks": "Prineville"
+  },
+  {
+    "type": "T6 Engine",
+    "name": "OR-OCF-E619",
+    "leader": "",
+    "assigned": 6,
+    "status": "Out of Service",
+    "location": "Prairie",
+    "remarks": "Mechanical"
+  },
+  {
+    "type": "Crew Module",
+    "name": "OR-OCF-C101",
+    "leader": "Amy Hicks",
+    "assigned": 7,
+    "status": "Off Forest",
+    "location": "Prairie",
+    "remarks": "NWR#4 ROGUE / SISKIYOU"
+  },
+  {
+    "type": "",
+    "name": "",
+    "leader": "",
+    "assigned": 0,
+    "status": "",
+    "location": "Prairie",
+    "remarks": ""
+  },
+  {
+    "type": "Prevention Tech",
+    "name": "OR-OCF-PT11",
+    "leader": "Jenny Alexander",
+    "assigned": 1,
+    "status": "Out of Service",
+    "location": "Prairie",
+    "remarks": ""
+  },
+  {
+    "type": "Fuels Tech",
+    "name": "OR-OFC-FT13",
+    "leader": "Zach Spears",
+    "assigned": 1,
+    "status": "Out of Service",
+    "location": "Prairie",
+    "remarks": ""
+  },
+  {
+    "type": "Fuels Tech",
+    "name": "OR-OCF-FT14",
+    "leader": "",
+    "assigned": 1,
+    "status": "",
+    "location": "Prairie",
+    "remarks": ""
+  },
+  {
+    "type": "Fuels Tech",
+    "name": "OR-OCF-FT11",
+    "leader": "",
+    "assigned": 1,
+    "status": "",
+    "location": "Prairie",
+    "remarks": ""
+  },
+  {
+    "type": "Fuels Tech",
+    "name": "OR-OCF-FT15",
+    "leader": "John Young",
+    "assigned": 1,
+    "status": "Out of Service",
+    "location": "Prairie",
+    "remarks": ""
+  },
+  {
+    "type": "Lookout",
+    "name": "Aldrich Mountain",
+    "leader": "Danielle Kirby -",
+    "assigned": 1,
+    "status": "In Service",
+    "location": "Prairie",
+    "remarks": "ALDRICH"
+  },
+  {
+    "type": "Lookout",
+    "name": "Pisgah Mountain",
+    "leader": "Zeyn O'Leary -",
+    "assigned": 1,
+    "status": "In Service",
+    "location": "Prairie",
+    "remarks": "PISGAH"
+  },
+  {
+    "type": "Lookout",
+    "name": "Wolf Mountain",
+    "leader": "Bill Neumeister -",
+    "assigned": 1,
+    "status": "In Service",
+    "location": "Prairie",
+    "remarks": "WOLF"
+  },
+  {
+    "type": "Lookout",
+    "name": "Stephenson Mnt",
+    "leader": "Ethan Kelly -",
+    "assigned": 1,
+    "status": "In Service",
+    "location": "Prairie",
+    "remarks": "STEPHENSON"
+  },
+  {
+    "type": "Lookout",
+    "name": "Tower Point",
+    "leader": "Brig Malessa",
+    "assigned": 1,
+    "status": "In Service",
+    "location": "Prairie",
+    "remarks": "TOWER POINT"
+  },
+  {
+    "type": "T6 Engine",
+    "name": "Tennessee E-662",
+    "leader": "Cody Field (423)220-7297",
+    "assigned": 7,
+    "status": "In Service",
+    "location": "8/11/2025 - Prairie",
+    "remarks": "Prineville"
+  },
+  {
+    "type": "Dozer",
+    "name": "DOZER 31 (MARK TWAIN NF)",
+    "leader": "GABE DEXTER (402) 336-8418 -DZIA",
+    "assigned": 2,
+    "status": "In Service",
+    "location": "8/15/2025 - Prairie",
+    "remarks": "Prineville"
+  },
+  {
+    "type": "Skidgen",
+    "name": "E-11 WOODWARD SKIDGINE",
+    "leader": "John Sampley (541)620-4313",
+    "assigned": 2,
+    "status": "Committed",
+    "location": "Prairie",
+    "remarks": "CASCADE DIV. - STEVENS FIRE"
+  },
+  {
+    "type": "Water Tender",
+    "name": "E-9 Santucci",
+    "leader": "Andrew (831)600-6890",
+    "assigned": 1,
+    "status": "Committed",
+    "location": "Prairie",
+    "remarks": "CASCADE DIV. - STEVENS FIRE"
+  },
+  {
+    "type": "Dozer",
+    "name": "E-10 Dozer T2 (Ceciliani Trucking)",
+    "leader": "Derek Ceciliani (541)-325-3602",
+    "assigned": 2,
+    "status": "In Service",
+    "location": "Prairie",
+    "remarks": "Prineville"
+  },
+  {
+    "type": "T6 Engine",
+    "name": "E-17 Methow T6 Engine",
+    "leader": "Ryan Todd (509)-740-9255",
+    "assigned": 3,
+    "status": "In Service",
+    "location": "8/5/2025 - Prairie",
+    "remarks": "Prineville"
+  },
+  {
+    "type": "Overhead",
+    "name": "OPS-10 - ICT3, DIVS",
+    "leader": "ANDY HAYES (541) 263-0691",
+    "assigned": 1,
+    "status": "In Service",
+    "location": "8/4/2025 - Prairie",
+    "remarks": "ICT3, DIVS,"
+  },
+  {
+    "type": "Overhead",
+    "name": "OPS-11 - ICT3, DIVS",
+    "leader": "VANCE HAZELTON (715) 499-3435",
+    "assigned": 1,
+    "status": "In Service",
+    "location": "8/8/2025 - Prairie",
+    "remarks": "ICT3, DIVS, THSP"
+  },
+  {
+    "type": "T1 Crew",
+    "name": "LAGRANDE IHC",
+    "leader": "CHEWY (541) 975-3843",
+    "assigned": 20,
+    "status": "In Service",
+    "location": "8/7/2025 - Prairie",
+    "remarks": ""
+  },
+  {
+    "type": "",
+    "name": "",
+    "leader": "",
+    "assigned": 0,
+    "status": "",
+    "location": "Prairie",
+    "remarks": ""
+  },
+  {
+    "type": "T6 Engine",
+    "name": "C-3 COOPER",
+    "leader": "STEPHAN WHITNEY (707) 382-5569",
+    "assigned": 3,
+    "status": "In Service",
+    "location": "11-Aug - Prairie",
+    "remarks": "Dayville"
+  },
+  {
+    "type": "T6 Engine",
+    "name": "C-4 PATRICK",
+    "leader": "CHRISTINA MARV(541) 213-3009",
+    "assigned": 3,
+    "status": "In Service",
+    "location": "11-Aug - Prairie",
+    "remarks": "Prineville"
+  }
+]
