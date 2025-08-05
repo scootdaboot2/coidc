@@ -15,6 +15,10 @@
       text-align: center;
       margin-bottom: 30px;
     }
+    .main-controls {
+      text-align: center;
+      margin-bottom: 20px;
+    }
     .main-content {
       display: flex;
       gap: 20px;
@@ -66,19 +70,6 @@
       background-color: #f5f5f5;
       font-weight: bold;
     }
-    .btn.update-btn {
-      padding: 4px 8px;
-      background: #ddd;
-      color: #666;
-      border: none;
-      cursor: pointer;
-      border-radius: 3px;
-      font-size: 11px;
-      margin-top: 5px;
-    }
-    .btn.update-btn:hover {
-      background: #ccc;
-    }
     .edit-input, .edit-select {
       width: 100%;
       box-sizing: border-box;
@@ -116,20 +107,55 @@
     .resource-option:hover {
       background: #f0f0f0;
     }
-    .resource-option.highlighted {
-      background: #e3f2fd;
+    .primary-btn {
+      background: #1976d2;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      margin: 5px;
+      border-radius: 5px;
+      font-size: 14px;
     }
-    .add-btn, .save-btn {
+    .primary-btn:hover {
+      background: #1565c0;
+    }
+    .secondary-btn {
+      background: #ff9800;
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      cursor: pointer;
+      margin: 5px;
+      border-radius: 3px;
+      font-size: 12px;
+    }
+    .secondary-btn:hover {
+      background: #f57c00;
+    }
+    .save-btn {
       background: #2e7d32;
       color: #fff;
       border: none;
-      padding: 6px 12px;
+      padding: 8px 16px;
       cursor: pointer;
-      margin: 6px 4px 6px 0;
+      margin: 5px;
       border-radius: 3px;
     }
-    .add-btn:hover, .save-btn:hover {
+    .save-btn:hover {
       background: #1b5e20;
+    }
+    .cancel-btn {
+      background: #757575;
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      cursor: pointer;
+      margin: 5px;
+      border-radius: 3px;
+    }
+    .cancel-btn:hover {
+      background: #616161;
     }
     .delete-btn {
       background: #c62828;
@@ -138,9 +164,22 @@
       padding: 4px 8px;
       cursor: pointer;
       border-radius: 3px;
+      font-size: 11px;
     }
     .delete-btn:hover {
       background: #8e0000;
+    }
+    .add-btn {
+      background: #2e7d32;
+      color: #fff;
+      border: none;
+      padding: 6px 12px;
+      cursor: pointer;
+      margin: 5px 0;
+      border-radius: 3px;
+    }
+    .add-btn:hover {
+      background: #1b5e20;
     }
     .status-late {
       background-color: #ffebee !important;
@@ -159,46 +198,9 @@
       background-color: #fff8e1 !important;
       color: #f57c00;
     }
-    .csv-controls {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background: #fff;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      display: none;
-    }
-    .csv-controls.show {
-      display: block;
-    }
-    .csv-buttons {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 4px;
-    }
-    .csv-btn {
-      padding: 4px 8px;
-      font-size: 11px;
-      border: none;
-      border-radius: 3px;
-      cursor: pointer;
-      white-space: nowrap;
-    }
-    .csv-btn.download {
-      background: #4caf50;
-      color: white;
-    }
-    .csv-btn.upload {
-      background: #2196f3;
-      color: white;
-    }
-    .csv-btn:hover {
-      opacity: 0.8;
-    }
     .filter-controls {
       margin: 10px 0;
+      text-align: center;
     }
     .filter-controls label {
       margin-right: 15px;
@@ -215,35 +217,133 @@
       margin: 0 0 10px 0;
       color: #1976d2;
     }
-    .data-management-btn {
-      background: #ff9800;
-      color: white;
-      border: none;
-      padding: 6px 12px;
-      cursor: pointer;
-      border-radius: 3px;
-      margin: 6px 4px;
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
     }
-    .data-management-btn:hover {
-      background: #f57c00;
+    .modal-content {
+      background-color: #fefefe;
+      margin: 2% auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 95%;
+      max-width: 1400px;
+      border-radius: 5px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 10px;
+    }
+    .close {
+      color: #aaa;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .close:hover {
+      color: black;
+    }
+    .data-tabs {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .data-tab {
+      padding: 10px 20px;
+      background: #f5f5f5;
+      border: 1px solid #ddd;
+      cursor: pointer;
+      border-radius: 5px 5px 0 0;
+    }
+    .data-tab.active {
+      background: #1976d2;
+      color: white;
+    }
+    .data-tab:hover {
+      background: #e0e0e0;
+    }
+    .data-tab.active:hover {
+      background: #1565c0;
+    }
+    .filter-section {
+      background: #f9f9f9;
+      padding: 15px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+    .filter-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .filter-input {
+      padding: 6px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      font-size: 12px;
+    }
+    .data-table-container {
+      max-height: 500px;
+      overflow: auto;
+      border: 1px solid #ddd;
+    }
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .data-table th {
+      background-color: #f5f5f5;
+      padding: 8px;
+      border: 1px solid #ddd;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .data-table td {
+      padding: 6px;
+      border: 1px solid #ddd;
+    }
+    .data-table input, .data-table select {
+      width: 100%;
+      padding: 4px;
+      border: 1px solid #ccc;
+      font-size: 11px;
+    }
+    .edit-mode .division-table td,
+    .edit-mode .aviation-table td {
+      padding: 4px;
+    }
+    .edit-mode .division-table input,
+    .edit-mode .division-table select,
+    .edit-mode .aviation-table input,
+    .edit-mode .aviation-table select {
+      width: 100%;
+      padding: 4px;
+      border: 1px solid #ccc;
+      font-size: 11px;
     }
   </style>
 </head>
 <body>
   <h1>Central Oregon Staffing</h1>
   
-  <div class="csv-controls" id="csvControls">
-    <div class="csv-buttons">
-      <button class="csv-btn download" onclick="downloadCSV('individuals')">↓ Individuals</button>
-      <button class="csv-btn download" onclick="downloadCSV('resources')">↓ Resources</button>
-      <button class="csv-btn download" onclick="downloadCSV('aviation')">↓ Aviation</button>
-      <input type="file" id="uploadIndividuals" style="display:none" accept=".csv" onchange="uploadCSV(event, 'individuals')">
-      <button class="csv-btn upload" onclick="document.getElementById('uploadIndividuals').click()">↑ Individuals</button>
-      <input type="file" id="uploadResources" style="display:none" accept=".csv" onchange="uploadCSV(event, 'resources')">
-      <button class="csv-btn upload" onclick="document.getElementById('uploadResources').click()">↑ Resources</button>
-      <input type="file" id="uploadAviation" style="display:none" accept=".csv" onchange="uploadCSV(event, 'aviation')">
-      <button class="csv-btn upload" onclick="document.getElementById('uploadAviation').click()">↑ Aviation</button>
-    </div>
+  <div class="main-controls">
+    <button class="primary-btn" id="updateStaffingBtn" onclick="toggleEditMode()">Update Staffing</button>
+    <button class="secondary-btn" onclick="openDataEditor()">Update Resources / Aviation</button>
   </div>
   
   <div class="cofms-header">
@@ -254,7 +354,7 @@
   <div class="filter-controls">
     <label><input type="checkbox" id="filterOutOfService" checked> Hide Out of Service</label>
     <label><input type="checkbox" id="filterOffForest"> Hide Off Forest</label>
-    <button class="update-btn" onclick="renderPage()">Apply Filters</button>
+    <button class="secondary-btn" onclick="renderPage()">Apply Filters</button>
   </div>
 
   <div class="main-content">
@@ -262,11 +362,52 @@
     <div id="aviation-container" class="aviation-column"></div>
   </div>
 
+  <!-- Data Editor Modal -->
+  <div id="dataEditorModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Data Editor</h2>
+        <span class="close" onclick="closeDataEditor()">&times;</span>
+      </div>
+      
+      <div class="data-tabs">
+        <div class="data-tab active" onclick="switchDataTab('resources')">Resources</div>
+        <div class="data-tab" onclick="switchDataTab('aviation')">Aviation</div>
+        <div class="data-tab" onclick="switchDataTab('personnel')">Personnel</div>
+      </div>
+      
+      <div class="filter-section">
+        <h4>Filters</h4>
+        <div class="filter-grid" id="filterGrid">
+          <!-- Dynamic filter inputs will be added here -->
+        </div>
+        <button class="secondary-btn" onclick="clearFilters()">Clear Filters</button>
+        <button class="add-btn" onclick="addNewRecord()">+ Add New</button>
+      </div>
+      
+      <div class="data-table-container">
+        <table class="data-table" id="dataTable">
+          <!-- Dynamic table content -->
+        </table>
+      </div>
+      
+      <div style="margin-top: 20px; text-align: center;">
+        <button class="save-btn" onclick="saveDataChanges()">Save All Changes</button>
+        <button class="secondary-btn" onclick="downloadCurrentData()">Download CSV</button>
+        <input type="file" id="csvUpload" style="display:none" accept=".csv">
+        <button class="secondary-btn" onclick="document.getElementById('csvUpload').click()">Upload CSV</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     // Global edit state
     let isEditMode = false;
+    let currentDataTab = 'resources';
+    let filteredData = [];
+    let currentFilters = {};
 
-    // Data storage - initialize with sample data from your JSON files
+    // Data storage
     let individualData = [
       {
         "First": "Jane",
@@ -313,7 +454,6 @@
         "location": "Cascade",
         "remarks": "ICT3"
       }
-      // Add more of your resource data here...
     ];
 
     let aviationData = { 
@@ -344,44 +484,18 @@
     ];
 
     const agencies = ["USFS", "BLM", "ODF"];
-    
-    const units = [
-      "Prineville FO", "Deschutes FO", "Central Oregon", "DEF-Bend", "DEF-Sisters", 
-      "DEF-Crescent", "OCF-Prineville", "COFMS"
-    ];
-
-    const locations = [
-      "Cascade", "Crescent", "Newberry East", "Newberry West", "Rivers", "Prairie", 
-      "ODF Sisters", "ODF Prineville", "ODF Fossil", "ODF John Day", "BIAK", "Walker Range"
-    ];
-
-    const titles = [
-      "BLM-Prineville District Manager", "BLM-Deschutes Field Manager", 
-      "BLM-Central Oregon Manager", "USFS-IC", "FMO", "BC", "Operations"
-    ];
-
+    const units = ["Prineville FO", "Deschutes FO", "Central Oregon", "DEF-Bend", "DEF-Sisters", "DEF-Crescent", "OCF-Prineville", "COFMS"];
+    const locations = ["Cascade", "Crescent", "Newberry East", "Newberry West", "Rivers", "Prairie", "ODF Sisters", "ODF Prineville", "ODF Fossil", "ODF John Day", "BIAK", "Walker Range"];
+    const titles = ["BLM-Prineville District Manager", "BLM-Deschutes Field Manager", "BLM-Central Oregon Manager", "USFS-IC", "FMO", "BC", "Operations"];
     const icsRoles = ["FFT1", "FFT2", "TFLD", "DIVS", "AA", "AR"];
-
-    const resourceTypes = [
-      "Duty Officer", "Overhead (FMO)", "Overhead (FT)", "Overhead (BC)", "Prevention", 
-      "Lookout", "ENG T3", "ENG T5", "ENG T6", "Overhead (FOS)", "CRWT2 IA", "CRWT2", 
-      "IHC", "WFMT1", "WFMT2", "HEL T1", "HEL T2", "HEL T3", "DOZ T1", "DOZ T2", 
-      "DOZ T3", "WTS T1", "WTS T2", "WTS T3", "IA MOD", "Severity", "Support"
-    ];
-
+    const resourceTypes = ["Duty Officer", "Overhead (FMO)", "Overhead (FT)", "Overhead (BC)", "Prevention", "Lookout", "ENG T3", "ENG T5", "ENG T6", "Overhead (FOS)", "CRWT2 IA", "CRWT2", "IHC", "WFMT1", "WFMT2", "HEL T1", "HEL T2", "HEL T3", "DOZ T1", "DOZ T2", "DOZ T3", "WTS T1", "WTS T2", "WTS T3", "IA MOD", "Severity", "Support"];
     const statuses = ["In Service", "Delayed Response", "Out of Service", "Off Forest", "Late Resource", "Committed"];
 
     // Helper functions
-    function createSelectOptions(array, selected = '', allowCustom = false) {
-      let options = array.map(item => 
+    function createSelectOptions(array, selected = '') {
+      return array.map(item => 
         `<option value="${item}" ${item === selected ? 'selected' : ''}>${item}</option>`
       ).join('');
-      
-      if (allowCustom && selected && !array.includes(selected)) {
-        options += `<option value="${selected}" selected>${selected}</option>`;
-      }
-      
-      return options;
     }
 
     function getStatusClass(status) {
@@ -394,15 +508,6 @@
       }
     }
 
-    function sortResourcesByStatus(resources) {
-      const statusOrder = ['Late Resource', 'In Service', 'Delayed Response', 'Committed', 'Off Forest', 'Out of Service'];
-      return resources.sort((a, b) => {
-        const aIndex = statusOrder.indexOf(a.status) === -1 ? 999 : statusOrder.indexOf(a.status);
-        const bIndex = statusOrder.indexOf(b.status) === -1 ? 999 : statusOrder.indexOf(b.status);
-        return aIndex - bIndex;
-      });
-    }
-
     function shouldShowResource(resource) {
       const hideOutOfService = document.getElementById('filterOutOfService').checked;
       const hideOffForest = document.getElementById('filterOffForest').checked;
@@ -412,10 +517,10 @@
       return true;
     }
 
-    // Resource search and auto-populate functions
-    function createResourceSearchField(selectedResource = '') {
-      const searchId = 'resource-search-' + Math.random().toString(36).substr(2, 9);
-      const dropdownId = 'resource-dropdown-' + Math.random().toString(36).substr(2, 9);
+    // Resource search functionality
+    function createResourceSearchField(selectedResource = '', rowIndex = '') {
+      const searchId = 'resource-search-' + rowIndex + '-' + Math.random().toString(36).substr(2, 5);
+      const dropdownId = 'resource-dropdown-' + rowIndex + '-' + Math.random().toString(36).substr(2, 5);
       
       return `
         <div class="resource-search-container">
@@ -437,103 +542,305 @@
     function filterResources(inputId, dropdownId) {
       const input = document.getElementById(inputId);
       const dropdown = document.getElementById(dropdownId);
+      if (!input || !dropdown) return;
+      
       const searchTerm = input.value.toLowerCase();
       
-      // Filter resources based on search term
       const filteredResources = resourceData.filter(resource => 
         resource.name.toLowerCase().includes(searchTerm) ||
         resource.type.toLowerCase().includes(searchTerm) ||
         resource.leader.toLowerCase().includes(searchTerm)
       );
       
-      // Build dropdown options
-      let optionsHTML = '';
-      filteredResources.forEach(resource => {
-        optionsHTML += `
-          <div class="resource-option" 
-               onmousedown="selectResource('${inputId}', '${resource.name}', ${JSON.stringify(resource).replace(/"/g, '&quot;')})">
-            <strong>${resource.name}</strong> - ${resource.type} (${resource.leader})
-          </div>
-        `;
+      let sourceData = [];
+      
+      switch(currentDataTab) {
+        case 'resources':
+          sourceData = resourceData;
+          break;
+        case 'aviation':
+          sourceData = [];
+          Object.entries(aviationData).forEach(([wingType, aircraft]) => {
+            aircraft.forEach(item => {
+              sourceData.push({
+                WingType: wingType,
+                Type: item.Type,
+                Resource: item.Resource,
+                Status: item.Status,
+                Location: item.Location,
+                OnOff: item.OnOff
+              });
+            });
+          });
+          break;
+        case 'personnel':
+          sourceData = individualData;
+          break;
+      }
+      
+      filteredData = sourceData.filter(item => {
+        return Object.keys(filters).every(key => {
+          const value = item[key];
+          return value && value.toString().toLowerCase().includes(filters[key]);
+        });
       });
       
-      dropdown.innerHTML = optionsHTML;
-      dropdown.style.display = optionsHTML ? 'block' : 'none';
+      renderDataTable(columns);
     }
 
-    function showResourceDropdown(dropdownId) {
-      const dropdown = document.getElementById(dropdownId);
-      const inputId = dropdownId.replace('resource-dropdown-', 'resource-search-');
-      filterResources(inputId, dropdownId);
+    function clearFilters() {
+      document.querySelectorAll('.filter-input').forEach(input => {
+        input.value = '';
+      });
+      
+      const columns = Object.keys(filteredData[0] || {});
+      applyFilters(columns);
     }
 
-    function hideResourceDropdown(dropdownId) {
-      setTimeout(() => {
-        const dropdown = document.getElementById(dropdownId);
-        dropdown.style.display = 'none';
-      }, 200); // Small delay to allow click events to fire
+    function renderDataTable(columns) {
+      const table = document.getElementById('dataTable');
+      
+      // Create header
+      let headerHTML = '<thead><tr>';
+      columns.forEach(col => {
+        headerHTML += `<th>${col}</th>`;
+      });
+      headerHTML += '<th>Actions</th></tr></thead>';
+      
+      // Create body
+      let bodyHTML = '<tbody>';
+      filteredData.forEach((item, index) => {
+        bodyHTML += '<tr>';
+        columns.forEach(col => {
+          const value = item[col] || '';
+          bodyHTML += `<td>${createEditCell(col, value, index)}</td>`;
+        });
+        bodyHTML += `<td><button class="delete-btn" onclick="deleteRecord(${index})">Delete</button></td>`;
+        bodyHTML += '</tr>';
+      });
+      bodyHTML += '</tbody>';
+      
+      table.innerHTML = headerHTML + bodyHTML;
     }
 
-    function selectResource(inputId, resourceName, resourceData) {
-      const input = document.getElementById(inputId);
-      const row = input.closest('tr');
-      
-      // Set the input value
-      input.value = resourceName;
-      
-      // Auto-populate other fields
-      populateResourceFields(row, resourceData);
-      
-      // Hide dropdown
-      const dropdownId = inputId.replace('resource-search-', 'resource-dropdown-');
-      document.getElementById(dropdownId).style.display = 'none';
-    }
-
-    function populateResourceFields(row, resource) {
-      const cells = row.querySelectorAll('td');
-      
-      // Type field (first select)
-      const typeSelect = cells[0]?.querySelector('select');
-      if (typeSelect && resource.type) {
-        typeSelect.value = resource.type;
-      }
-      
-      // Leader field (third cell)
-      const leaderField = cells[2]?.querySelector('input, select');
-      if (leaderField && resource.leader) {
-        leaderField.value = resource.leader;
-      }
-      
-      // Assigned field (fourth cell)
-      const assignedField = cells[3]?.querySelector('input');
-      if (assignedField && resource.assigned !== undefined) {
-        assignedField.value = resource.assigned;
-      }
-      
-      // Status field (fifth cell)
-      const statusSelect = cells[4]?.querySelector('select');
-      if (statusSelect && resource.status) {
-        statusSelect.value = resource.status;
-      }
-      
-      // Location field (sixth cell)
-      const locationField = cells[5]?.querySelector('input, select');
-      if (locationField && resource.location) {
-        locationField.value = resource.location;
-      }
-      
-      // Remarks field (seventh cell)
-      const remarksField = cells[6]?.querySelector('input');
-      if (remarksField && resource.remarks) {
-        remarksField.value = resource.remarks;
+    function createEditCell(column, value, index) {
+      switch(column) {
+        case 'type':
+          return `<select onchange="updateDataValue(${index}, '${column}', this.value)">${createSelectOptions([''].concat(resourceTypes), value)}</select>`;
+        case 'status':
+          if (currentDataTab === 'resources') {
+            return `<select onchange="updateDataValue(${index}, '${column}', this.value)">${createSelectOptions([''].concat(statuses), value)}</select>`;
+          } else {
+            return `<select onchange="updateDataValue(${index}, '${column}', this.value)">${createSelectOptions(['', 'Available', 'Unavailable', 'Committed', 'Out of Service'], value)}</select>`;
+          }
+        case 'Agency':
+          return `<select onchange="updateDataValue(${index}, '${column}', this.value)">${createSelectOptions([''].concat(agencies), value)}</select>`;
+        case 'Unit':
+          return `<select onchange="updateDataValue(${index}, '${column}', this.value)">${createSelectOptions([''].concat(units), value)}</select>`;
+        case 'Location':
+        case 'location':
+          return `<select onchange="updateDataValue(${index}, '${column}', this.value)">${createSelectOptions([''].concat(locations), value)}</select>`;
+        case 'Title':
+          return `<select onchange="updateDataValue(${index}, '${column}', this.value)">${createSelectOptions([''].concat(titles), value)}</select>`;
+        case 'ICSRole':
+          return `<select onchange="updateDataValue(${index}, '${column}', this.value)">${createSelectOptions([''].concat(icsRoles), value)}</select>`;
+        case 'WingType':
+          return `<select onchange="updateDataValue(${index}, '${column}', this.value)">${createSelectOptions(['Rotor Wing', 'Fixed Wing'], value)}</select>`;
+        case 'Lead':
+          return `<select onchange="updateDataValue(${index}, '${column}', this.value)"><option value="Yes" ${value === 'Yes' ? 'selected' : ''}>Yes</option><option value="No" ${value === 'No' ? 'selected' : ''}>No</option></select>`;
+        case 'assigned':
+          return `<input type="number" value="${value}" onchange="updateDataValue(${index}, '${column}', this.value)">`;
+        default:
+          return `<input type="text" value="${value}" onchange="updateDataValue(${index}, '${column}', this.value)">`;
       }
     }
 
-    // Data transformation
+    function updateDataValue(index, column, value) {
+      if (filteredData[index]) {
+        filteredData[index][column] = value;
+      }
+    }
+
+    function addNewRecord() {
+      let newRecord = {};
+      
+      switch(currentDataTab) {
+        case 'resources':
+          newRecord = {
+            type: '',
+            name: '',
+            leader: '',
+            assigned: 0,
+            status: 'In Service',
+            location: '',
+            remarks: ''
+          };
+          break;
+        case 'aviation':
+          newRecord = {
+            WingType: 'Rotor Wing',
+            Type: '',
+            Resource: '',
+            Status: 'Available',
+            Location: '',
+            OnOff: '0800-2000'
+          };
+          break;
+        case 'personnel':
+          newRecord = {
+            First: '',
+            Last: '',
+            Phone: '',
+            Phone2: '',
+            Email: '',
+            Agency: 'USFS',
+            Unit: 'COFMS',
+            Location: '',
+            Title: '',
+            ICSRole: 'FFT1',
+            AssignedTo: '',
+            Lead: 'No',
+            Remarks: ''
+          };
+          break;
+      }
+      
+      filteredData.push(newRecord);
+      const columns = Object.keys(newRecord);
+      renderDataTable(columns);
+    }
+
+    function deleteRecord(index) {
+      if (confirm('Are you sure you want to delete this record?')) {
+        filteredData.splice(index, 1);
+        const columns = Object.keys(filteredData[0] || {});
+        renderDataTable(columns);
+      }
+    }
+
+    function saveDataChanges() {
+      // Update the main data arrays with filtered data
+      switch(currentDataTab) {
+        case 'resources':
+          resourceData = [...filteredData];
+          break;
+        case 'aviation':
+          const newAviationData = { "Rotor Wing": [], "Fixed Wing": [] };
+          filteredData.forEach(item => {
+            const aircraft = {
+              Type: item.Type,
+              Resource: item.Resource,
+              Status: item.Status,
+              Location: item.Location,
+              OnOff: item.OnOff
+            };
+            
+            if (item.WingType === 'Rotor Wing') {
+              newAviationData["Rotor Wing"].push(aircraft);
+            } else {
+              newAviationData["Fixed Wing"].push(aircraft);
+            }
+          });
+          aviationData = newAviationData;
+          break;
+        case 'personnel':
+          individualData = [...filteredData];
+          break;
+      }
+      
+      // Re-render the main page to reflect changes
+      renderPage();
+      alert('Changes saved successfully!');
+    }
+
+    function downloadCurrentData() {
+      let filename = '';
+      let headers = [];
+      let rows = [];
+      
+      switch(currentDataTab) {
+        case 'resources':
+          filename = 'resources.csv';
+          headers = ['type', 'name', 'leader', 'assigned', 'status', 'location', 'remarks'];
+          rows = filteredData.map(item => headers.map(h => item[h] || ''));
+          break;
+        case 'aviation':
+          filename = 'aviation.csv';
+          headers = ['WingType', 'Type', 'Resource', 'Status', 'Location', 'OnOff'];
+          rows = filteredData.map(item => headers.map(h => item[h] || ''));
+          break;
+        case 'personnel':
+          filename = 'individuals.csv';
+          headers = ['First', 'Last', 'Phone', 'Phone2', 'Email', 'Agency', 'Unit', 'Location', 'Title', 'ICSRole', 'AssignedTo', 'Lead', 'Remarks'];
+          rows = filteredData.map(item => headers.map(h => item[h] || ''));
+          break;
+      }
+      
+      const csvContent = [headers, ...rows].map(row => 
+        row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')
+      ).join('\n');
+      
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    // CSV Upload functionality
+    document.getElementById('csvUpload').addEventListener('change', function(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const text = e.target.result;
+          const lines = text.trim().split('\n');
+          const headers = lines[0].split(',').map(h => h.replace(/"/g, '').trim());
+          
+          const newData = [];
+          for (let i = 1; i < lines.length; i++) {
+            const values = [];
+            let current = '';
+            let inQuotes = false;
+            
+            for (let j = 0; j < lines[i].length; j++) {
+              const char = lines[i][j];
+              if (char === '"') {
+                inQuotes = !inQuotes;
+              } else if (char === ',' && !inQuotes) {
+                values.push(current.trim());
+                current = '';
+              } else {
+                current += char;
+              }
+            }
+            values.push(current.trim());
+            
+            const row = {};
+            headers.forEach((header, index) => {
+              row[header] = values[index] ? values[index].replace(/^"|"$/g, '') : '';
+            });
+            newData.push(row);
+          }
+          
+          filteredData = newData;
+          renderDataTable(headers);
+          alert('CSV loaded successfully!');
+        } catch (error) {
+          alert('Error loading CSV: ' + error.message);
+        }
+      };
+      reader.readAsText(file);
+    });
+
+    // Data transformation and rendering
     function getStaffingData() {
       const divisionMap = new Map();
       
-      // Initialize all divisions
       divisions.forEach(divName => {
         divisionMap.set(divName, {
           name: divName,
@@ -544,7 +851,6 @@
         });
       });
       
-      // Add individuals to divisions
       individualData.forEach(person => {
         const location = person.Location || 'Unassigned';
         const divName = divisions.find(d => d.includes(location)) || location;
@@ -565,7 +871,6 @@
         }
       });
 
-      // Add resources to divisions and find duty officers
       resourceData.forEach(resource => {
         const location = resource.location || 'Unassigned';
         const divName = divisions.find(d => d.includes(location)) || location;
@@ -588,9 +893,13 @@
         }
       });
 
-      // Sort resources by status for each division
       divisionMap.forEach(division => {
-        division.resources = sortResourcesByStatus(division.resources);
+        division.resources.sort((a, b) => {
+          const statusOrder = ['Late Resource', 'In Service', 'Delayed Response', 'Committed', 'Off Forest', 'Out of Service'];
+          const aIndex = statusOrder.indexOf(a.status) === -1 ? 999 : statusOrder.indexOf(a.status);
+          const bIndex = statusOrder.indexOf(b.status) === -1 ? 999 : statusOrder.indexOf(b.status);
+          return aIndex - bIndex;
+        });
       });
 
       return Array.from(divisionMap.values());
@@ -613,246 +922,17 @@
       return 'None Assigned';
     }
 
-    // CSV handling functions
-    function downloadCSV(type) {
-      let rows = [];
-      let filename = '';
-      
-      switch(type) {
-        case 'individuals':
-          rows.push(['First', 'Last', 'Phone', 'Phone2', 'Email', 'Agency', 'Unit', 'Location', 'Title', 'ICSRole', 'AssignedTo', 'Lead', 'Remarks']);
-          individualData.forEach(person => {
-            rows.push([
-              person.First || '', person.Last || '', person.Phone || '', person.Phone2 || '',
-              person.Email || '', person.Agency || '', person.Unit || '', person.Location || '',
-              person.Title || '', person.ICSRole || '', person.AssignedTo || '', person.Lead || '', person.Remarks || ''
-            ]);
-          });
-          filename = 'individuals.csv';
-          break;
-          
-        case 'resources':
-          rows.push(['type', 'name', 'leader', 'assigned', 'status', 'location', 'remarks']);
-          resourceData.forEach(resource => {
-            rows.push([
-              resource.type || '', resource.name || '', resource.leader || '',
-              resource.assigned || '', resource.status || '', resource.location || '', resource.remarks || ''
-            ]);
-          });
-          filename = 'resources.csv';
-          break;
-          
-        case 'aviation':
-          rows.push(['Type', 'Resource', 'Status', 'Location', 'OnOff']);
-          Object.entries(aviationData).forEach(([type, resources]) => {
-            resources.forEach(resource => {
-              rows.push([type, resource.Resource || '', resource.Status || '', resource.Location || '', resource.OnOff || '']);
-            });
-          });
-          filename = 'aviation.csv';
-          break;
-      }
-      
-      const csv = rows.map(row => 
-        row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')
-      ).join('\n');
-      
-      const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = filename;
-      a.click();
-      URL.revokeObjectURL(url);
-    }
-
-    function uploadCSV(event, type) {
-      const file = event.target.files[0];
-      if (!file) return;
-      
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        try {
-          const text = e.target.result;
-          const lines = text.trim().split('\n');
-          const headers = lines[0].split(',').map(h => h.replace(/"/g, '').trim());
-          
-          const newData = [];
-          for (let i = 1; i < lines.length; i++) {
-            const values = [];
-            let current = '';
-            let inQuotes = false;
-            
-            // Parse CSV properly handling quoted values
-            for (let j = 0; j < lines[i].length; j++) {
-              const char = lines[i][j];
-              if (char === '"') {
-                inQuotes = !inQuotes;
-              } else if (char === ',' && !inQuotes) {
-                values.push(current.trim());
-                current = '';
-              } else {
-                current += char;
-              }
-            }
-            values.push(current.trim()); // Add the last value
-            
-            const row = {};
-            headers.forEach((header, index) => {
-              row[header] = values[index] ? values[index].replace(/^"|"$/g, '') : '';
-            });
-            newData.push(row);
-          }
-          
-          switch(type) {
-            case 'individuals':
-              individualData = newData;
-              break;
-            case 'resources':
-              resourceData = newData;
-              break;
-            case 'aviation':
-              // Convert flat CSV back to nested structure
-              const newAviationData = { "Rotor Wing": [], "Fixed Wing": [] };
-              newData.forEach(row => {
-                const aviationItem = {
-                  Resource: row.Resource || '',
-                  Status: row.Status || '',
-                  Location: row.Location || '',
-                  OnOff: row.OnOff || ''
-                };
-                
-                if (row.Type === 'Rotor Wing') {
-                  aviationItem.Type = 'HEL T1';
-                  newAviationData["Rotor Wing"].push(aviationItem);
-                } else if (row.Type === 'Fixed Wing') {
-                  aviationItem.Type = 'SEAT';
-                  newAviationData["Fixed Wing"].push(aviationItem);
-                }
-              });
-              aviationData = newAviationData;
-              break;
-          }
-          
-          renderPage();
-          alert(`${type} CSV loaded successfully!`);
-        } catch (error) {
-          alert(`Error loading ${type} CSV: ${error.message}`);
-        }
-      };
-      reader.readAsText(file);
-    }
-
-    // Edit functions
-    function toggleEditMode() {
-      isEditMode = !isEditMode;
-      const csvControls = document.getElementById('csvControls');
-      if (isEditMode) {
-        csvControls.classList.add('show');
-      } else {
-        csvControls.classList.remove('show');
-      }
-    }
-
-    function createEditableRow(resource) {
-      // Get all individuals for leader dropdown
-      const leaders = individualData.map(i => `${i.First} ${i.Last}`);
-      
-      return `
-        <tr>
-          <td><select class="edit-select">${createSelectOptions(resourceTypes, resource.type, true)}</select></td>
-          <td>${createResourceSearchField(resource.name)}</td>
-          <td><input class="edit-input" value="${resource.leader}" placeholder="Leader name"></td>
-          <td><input class="edit-input" type="number" value="${resource.assigned}" /></td>
-          <td><select class="edit-select">${createSelectOptions(statuses, resource.status)}</select></td>
-          <td><input class="edit-input" list="locationsList" value="${resource.location}">
-              <datalist id="locationsList">${locations.map(loc => `<option value="${loc}">`).join('')}</datalist></td>
-          <td><input class="edit-input" value="${resource.remarks}" /></td>
-          <td><button class="delete-btn" onclick="this.closest('tr').remove()">✖</button></td>
-        </tr>
-      `;
-    }
-
-    function toggleDivisionEdit(div, divisionData) {
-      toggleEditMode();
-      
-      const table = div.querySelector('table');
-      const tbody = table.querySelector('tbody');
-      tbody.innerHTML = divisionData.resources.map(res => createEditableRow(res)).join('');
-
-      const addBtn = document.createElement('button');
-      addBtn.className = 'add-btn';
-      addBtn.textContent = '+ Add Resource';
-      addBtn.onclick = () => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = createEditableRow({ type: '', name: '', leader: '', assigned: 1, status: 'In Service', location: divisionData.name, remarks: '' });
-        tbody.appendChild(tr);
-      };
-
-      const dataManageBtn = document.createElement('button');
-      dataManageBtn.className = 'data-management-btn';
-      dataManageBtn.textContent = 'Manage Data';
-      dataManageBtn.onclick = () => {
-        alert('Data management functionality can be expanded here');
-      };
-
-      // Clear previous buttons
-      const prevButtons = div.querySelectorAll('.add-btn, .data-management-btn, .save-btn');
-      prevButtons.forEach(btn => btn.remove());
-      
-      table.insertAdjacentElement('beforebegin', addBtn);
-      table.insertAdjacentElement('beforebegin', dataManageBtn);
-      
-      const saveBtn = document.createElement('button');
-      saveBtn.className = 'save-btn';
-      saveBtn.textContent = 'Save Section';
-      saveBtn.onclick = () => {
-        const updatedRows = [];
-        tbody.querySelectorAll('tr').forEach(row => {
-          const typeSelect = row.querySelector('select');
-          const resourceInput = row.querySelector('.resource-search-input');
-          const leaderInput = row.querySelectorAll('input')[1]; // Second input
-          const assignedInput = row.querySelector('input[type="number"]');
-          const statusSelect = row.querySelectorAll('select')[1]; // Second select
-          const locationInput = row.querySelectorAll('input')[3]; // Fourth input
-          const remarksInput = row.querySelectorAll('input')[4]; // Fifth input
-          
-          if (resourceInput && resourceInput.value.trim()) {
-            updatedRows.push({
-              type: typeSelect ? typeSelect.value : '',
-              name: resourceInput.value.trim(),
-              leader: leaderInput ? leaderInput.value : '',
-              assigned: assignedInput ? parseInt(assignedInput.value) || 0 : 0,
-              status: statusSelect ? statusSelect.value : 'In Service',
-              location: locationInput ? locationInput.value : divisionData.name,
-              remarks: remarksInput ? remarksInput.value : ''
-            });
-          }
-        });
-
-        // Update resourceData - remove old resources for this location and add new ones
-        resourceData = resourceData.filter(r => r.location !== divisionData.name);
-        updatedRows.forEach(row => {
-          resourceData.push(row);
-        });
-
-        renderPage();
-        alert('Division saved! Use "↓ Resources" to download updated CSV.');
-      };
-
-      div.appendChild(saveBtn);
-    }
-
     function renderPage() {
       const staffingContainer = document.getElementById('staffing-container');
       const aviationContainer = document.getElementById('aviation-container');
       const dutyOfficerDiv = document.getElementById('cofms-duty-officer');
 
-      // Set COFMS duty officer block
-      dutyOfficerDiv.innerHTML = getCOFMSDutyOfficer();
+      // Clear edit mode
+      document.querySelectorAll('.edit-mode').forEach(el => el.classList.remove('edit-mode'));
 
-      // Clear and rebuild staffing container
+      dutyOfficerDiv.innerHTML = getCOFMSDutyOfficer();
       staffingContainer.innerHTML = '';
+      
       const staffingData = getStaffingData();
 
       staffingData.forEach(division => {
@@ -890,7 +970,6 @@
               ${resourcesHTML || `<tr><td colspan="7"><em>No resources shown with current filters.</em></td></tr>`}
             </tbody>
           </table>
-          <button class="update-btn" onclick="toggleDivisionEdit(this.parentElement, ${JSON.stringify(division).replace(/"/g, '&quot;')})">✎ Edit</button>
         `;
 
         staffingContainer.appendChild(section);
@@ -926,26 +1005,18 @@
 
     // Load data from JSON files if available
     async function loadJSONFiles() {
-      console.log('Loading JSON files...');
-      
       try {
-        // Try to load individuals.json
         try {
           const individualsResponse = await fetch('data/individuals.json');
           if (individualsResponse.ok) {
             individualData = await individualsResponse.json();
-            console.log('✓ individuals.json loaded');
           }
-        } catch (error) {
-          console.log('individuals.json not found, using sample data');
-        }
+        } catch (e) { /* Use default data */ }
 
-        // Try to load resources.json
         try {
           const resourcesResponse = await fetch('data/resources.json');
           if (resourcesResponse.ok) {
             const loadedResources = await resourcesResponse.json();
-            // Convert to expected format if needed
             resourceData = loadedResources.map(resource => ({
               type: resource.type || resource.ResourceType || '',
               name: resource.name || resource.ResourceName || '',
@@ -955,35 +1026,25 @@
               location: resource.location || resource.Location || '',
               remarks: resource.remarks || resource.Remarks || ''
             }));
-            console.log('✓ resources.json loaded and converted');
           }
-        } catch (error) {
-          console.log('resources.json not found, using sample data');
-        }
+        } catch (e) { /* Use default data */ }
 
-        // Try to load aviation.json
         try {
           const aviationResponse = await fetch('data/aviation.json');
           if (aviationResponse.ok) {
             aviationData = await aviationResponse.json();
-            console.log('✓ aviation.json loaded');
           }
-        } catch (error) {
-          console.log('aviation.json not found, using sample data');
-        }
+        } catch (e) { /* Use default data */ }
 
       } catch (error) {
         console.error('Error loading JSON files:', error);
       }
 
-      // Always render the page
       renderPage();
     }
 
-    // Initialize page
-    document.addEventListener('DOMContentLoaded', function() {
-      loadJSONFiles();
-    });
+    // Initialize
+    document.addEventListener('DOMContentLoaded', loadJSONFiles);
 
     // Close dropdowns when clicking outside
     document.addEventListener('click', function(event) {
@@ -994,6 +1055,14 @@
       }
     });
 
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+      const modal = document.getElementById('dataEditorModal');
+      if (event.target === modal) {
+        closeDataEditor();
+      }
+    };
+
   </script>
 </body>
-</html>
+</html> 
