@@ -551,6 +551,18 @@
         resource.type.toLowerCase().includes(searchTerm) ||
         resource.leader.toLowerCase().includes(searchTerm)
       );
+      // You may want to populate the dropdown here, but for now just close the function
+    }
+
+    function applyFilters(columns) {
+      const filterInputs = document.querySelectorAll('.filter-input');
+      const filters = {};
+      
+      filterInputs.forEach((input, index) => {
+        if (input.value.trim()) {
+          filters[columns[index]] = input.value.toLowerCase();
+        }
+      });
       
       let sourceData = [];
       
@@ -593,7 +605,19 @@
         input.value = '';
       });
       
-      const columns = Object.keys(filteredData[0] || {});
+      // Get columns from current tab
+      let columns = [];
+      switch(currentDataTab) {
+        case 'resources':
+          columns = ['type', 'name', 'leader', 'assigned', 'status', 'location', 'remarks'];
+          break;
+        case 'aviation':
+          columns = ['WingType', 'Type', 'Resource', 'Status', 'Location', 'OnOff'];
+          break;
+        case 'personnel':
+          columns = ['First', 'Last', 'Phone', 'Phone2', 'Email', 'Agency', 'Unit', 'Location', 'Title', 'ICSRole', 'AssignedTo', 'Lead', 'Remarks'];
+          break;
+      }
       applyFilters(columns);
     }
 
@@ -1065,4 +1089,4 @@
 
   </script>
 </body>
-</html> 
+</html>
