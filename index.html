@@ -1067,6 +1067,295 @@
       renderPage();
     }
 
+    optionsHTML = '';
+      filteredResources.forEach(resource => {
+        optionsHTML += `
+          <div class="resource-option" 
+               onmousedown="selectResource('${inputId}', '${resource.name}', ${JSON.stringify(resource).replace(/"/g, '&quot;')})">
+            <strong>${resource.name}</strong> - ${resource.type} (${resource.leader})
+          </div>
+        `;
+      });
+      
+      dropdown.innerHTML = optionsHTML;
+      dropdown.style.display = optionsHTML ? 'block' : 'none';
+
+    function showResourceDropdown(dropdownId) {
+      const dropdown = document.getElementById(dropdownId);
+      if (!dropdown) return;
+      const inputId = dropdownId.replace('resource-dropdown-', 'resource-search-').split('-').slice(0, -1).join('-');
+      filterResources(inputId, dropdownId);
+    }
+
+    function hideResourceDropdown(dropdownId) {
+      setTimeout(() => {
+        const dropdown = document.getElementById(dropdownId);
+        if (dropdown) dropdown.style.display = 'none';
+      }, 200);
+    }
+
+    function selectResource(inputId, resourceName, resourceInfo) {
+      const input = document.getElementById(inputId);
+      if (!input) return;
+      
+      const row = input.closest('tr');
+      input.value = resourceName;
+      
+      if (row) populateResourceFields(row, resourceInfo);
+      
+      const dropdownId = inputId.replace('resource-search-', 'resource-dropdown-');
+      const dropdown = document.getElementById(dropdownId);
+      if (dropdown) dropdown.style.display = 'none';
+    }
+
+    function populateResourceFields(row, resource) {
+      const cells = row.querySelectorAll('td');
+      
+      const typeSelect = cells[0]?.querySelector('select');
+      if (typeSelect && resource.type) typeSelect.value = resource.type;
+      
+      const leaderField = cells[2]?.querySelector('input');
+      if (leaderField && resource.leader) leaderField.value = resource.leader;
+      
+      const assignedField = cells[3]?.querySelector('input');
+      if (assignedField && resource.assigned !== undefined) assignedField.value = resource.assigned;
+      
+      const statusSelect = cells[4]?.querySelector('select');
+      if (statusSelect && resource.status) statusSelect.value = resource.status;
+      
+      const locationField = cells[5]?.querySelector('input');
+      if (locationField && resource.location) locationField.value = resource.location;
+      
+      const remarksField = cells[6]?.querySelector('input');
+      if (remarksField && resource.remarks) remarksField.value = resource.remarks;
+    }
+
+    // Main edit mode functions
+    function toggleEditMode() {
+      console.log('toggleEditMode called, current isEditMode:', isEditMode);
+      isEditMode = !isEditMode;
+      const btn = document.getElementById('updateStaffingBtn');
+      
+      if (isEditMode) {
+        console.log('Entering edit mode');
+        btn.textContent = 'Save Staffing';
+        btn.className = 'save-btn';
+        makeAllTablesEditable();
+      } else {
+        console.log('Exiting edit mode');
+        saveAllStaffingChanges();
+        btn.textContent = 'Update Staffing';
+        btn.className = 'primary-btn';
+        renderPage();
+      }
+    }
+
+    function makeAllTablesEditable() {
+      console.log('Making tables editable');
+      document.querySelectorAll('.division-section').forEach((section, index) => {
+        console.log('Processing division section', index);
+        section.classList.add('edit-mode');
+        const table = section.querySelector('.division-table tbody');
+        if (table) {
+          console.log('Found division table, making editable');
+          makeTableEditable(table, 'division');
+        }
+      });
+      
+      document.querySelectorAll('.aviation-table-section').forEach((section, index) => {
+        console.log('Processing aviation section', index);
+        section.classList.add('edit-mode');
+        const table = section.querySelector('.aviation-table tbody');
+        if (table) {
+          console.log('Found aviation table, making editable');
+          makeTableEditable(table, 'aviation');
+        }
+      });
+    }
+
+    function makeTableEditable(tbody, type) {
+      const rows = tbody.querySelectorAll('tr');
+      
+      rows.forEach((row, rowIndex) => {
+        const cells = row.querySelectorAll('td');
+        
+        if (type === 'division') {
+          // Type
+          cells[0].innerHTML = `<select class="edit-select">${createSelectOptions(resourceTypes, cells[0].textContent.trim())}</select>`;
+          // Resource (with search)
+          cells[1].innerHTML = createResourceSearchField(cells[1].textContent.trim(), rowIndex);
+          // Leader
+          cells[2].innerHTML = `<input class="edit-input" value="${cells[2].textContent.trim()}">`;
+          // Assigned
+          cells[3].innerHTML = `<input class="edit-input" type="number" value="${cells[3].textContent.trim()}">`;
+          // Status
+          cells[4].innerHTML = `<select class="edit-select">${createSelectOptions(statuses, cells[4].textContent.trim())}</select>`;
+          // Location
+          cells[5].innerHTML = `<input class="edit-input" value="${cells[5].textContent.trim()}">`;
+          // Remarks
+          cells[6].innerHTML = `<input class="edit-input" value="${cells[6].textContent.trim()}">`;
+        } else if (type === 'aviation') {
+          // Type
+          cells[0].innerHTML = `<input class="edit-input" value="${cells[0].textContent.trim()}">`;
+          // Resource
+          cells[1].innerHTML = `<input class="edit-input" value="${cells[1].textContent.trim()}">`;
+          // Status
+          cells[2].innerHTML = `<select class="edit-select">${createSelectOptions(['Available', 'Unavailable', 'Committed', 'Out of Service'], cells[2].textContent.trim())}</select>`;
+          // Location
+          cells[3].innerHTML = `<input class="edit-input" value="${cells[3].textContent.trim()}">`;
+          // On/Off
+          cells[4].innerHTML = `<input class="edit-input" value="${cells[4].textContent.trim()}">`;
+        }
+      });
+    }
+
+    function saveAllStaffingChanges() {
+      // Save division changes
+      document.querySelectorAll('.division-section.edit-mode').forEach(section => {
+        const divisionName = section.querySelector('h3').textContent;
+        const tbody = section.querySelector('.division-table tbody');
+        const rows = tbody.querySelectorAll('tr');
+        
+        // Remove existing resources for this division
+        resourceData = resourceData.filter(r => r.location !== divisionName);
+        
+        // Add updated resources
+        rows.forEach(row => {
+          const cells = row.querySelectorAll('td');
+          const resourceInput = cells[1]?.querySelector('.resource-search-input');
+          
+          if (resourceInput && resourceInput.value.trim()) {
+            resourceData.push({
+              type: cells[0]?.querySelector('select')?.value || '',
+              name: resourceInput.value.trim(),
+              leader: cells[2]?.querySelector('input')?.value || '',
+              assigned: parseInt(cells[3]?.querySelector('input')?.value) || 0,
+              status: cells[4]?.querySelector('select')?.value || 'In Service',
+              location: cells[5]?.querySelector('input')?.value || divisionName,
+              remarks: cells[6]?.querySelector('input')?.value || ''
+            });
+          }
+        });
+      });
+      
+      // Save aviation changes
+      const newAviationData = { "Rotor Wing": [], "Fixed Wing": [] };
+      document.querySelectorAll('.aviation-table-section.edit-mode').forEach(section => {
+        const wingType = section.querySelector('h3').textContent;
+        const tbody = section.querySelector('.aviation-table tbody');
+        const rows = tbody.querySelectorAll('tr');
+        
+        rows.forEach(row => {
+          const cells = row.querySelectorAll('td');
+          const resourceInput = cells[1]?.querySelector('input');
+          
+          if (resourceInput && resourceInput.value.trim()) {
+            const aircraft = {
+              Type: cells[0]?.querySelector('input')?.value || '',
+              Resource: resourceInput.value.trim(),
+              Status: cells[2]?.querySelector('select')?.value || 'Available',
+              Location: cells[3]?.querySelector('input')?.value || '',
+              OnOff: cells[4]?.querySelector('input')?.value || ''
+            };
+            
+            if (wingType === 'Rotor Wing') {
+              newAviationData["Rotor Wing"].push(aircraft);
+            } else {
+              newAviationData["Fixed Wing"].push(aircraft);
+            }
+          }
+        });
+      });
+      
+      aviationData = newAviationData;
+    }
+
+    // Data Editor Modal Functions
+    function openDataEditor() {
+      document.getElementById('dataEditorModal').style.display = 'block';
+      switchDataTab('resources');
+    }
+
+    function closeDataEditor() {
+      document.getElementById('dataEditorModal').style.display = 'none';
+    }
+
+    function switchDataTab(tab) {
+      currentDataTab = tab;
+      
+      // Update tab appearance
+      document.querySelectorAll('.data-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.data-tab').forEach(t => {
+        if (t.textContent.toLowerCase().includes(tab.toLowerCase())) {
+          t.classList.add('active');
+        }
+      });
+      
+      // Load data for the selected tab
+      loadDataForTab(tab);
+    }
+
+    function loadDataForTab(tab) {
+      let data = [];
+      let columns = [];
+      
+      switch(tab) {
+        case 'resources':
+          data = resourceData;
+          columns = ['type', 'name', 'leader', 'assigned', 'status', 'location', 'remarks'];
+          break;
+        case 'aviation':
+          data = [];
+          Object.entries(aviationData).forEach(([wingType, aircraft]) => {
+            aircraft.forEach(item => {
+              data.push({
+                WingType: wingType,
+                Type: item.Type,
+                Resource: item.Resource,
+                Status: item.Status,
+                Location: item.Location,
+                OnOff: item.OnOff
+              });
+            });
+          });
+          columns = ['WingType', 'Type', 'Resource', 'Status', 'Location', 'OnOff'];
+          break;
+        case 'personnel':
+          data = individualData;
+          columns = ['First', 'Last', 'Phone', 'Phone2', 'Email', 'Agency', 'Unit', 'Location', 'Title', 'ICSRole', 'AssignedTo', 'Lead', 'Remarks'];
+          break;
+      }
+      
+      createFilterInputs(columns);
+      filteredData = [...data];
+      renderDataTable(columns);
+    }
+
+    function createFilterInputs(columns) {
+      const filterGrid = document.getElementById('filterGrid');
+      filterGrid.innerHTML = '';
+      
+      columns.forEach(col => {
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'filter-input';
+        input.placeholder = `Filter ${col}...`;
+        input.onkeyup = () => applyFilters(columns);
+        filterGrid.appendChild(input);
+      });
+    }
+
+    function applyFilters(columns) {
+      const filterInputs = document.querySelectorAll('.filter-input');
+      const filters = {};
+      
+      filterInputs.forEach((input, index) => {
+        if (input.value.trim()) {
+          filters[columns[index]] = input.value.toLowerCase();
+        }
+      });
+    }
+
     // Initialize
     document.addEventListener('DOMContentLoaded', loadJSONFiles);
 
