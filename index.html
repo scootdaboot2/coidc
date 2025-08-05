@@ -1344,18 +1344,7 @@
         filterGrid.appendChild(input);
       });
     }
-
-    function applyFilters(columns) {
-      const filterInputs = document.querySelectorAll('.filter-input');
-      const filters = {};
-      
-      filterInputs.forEach((input, index) => {
-        if (input.value.trim()) {
-          filters[columns[index]] = input.value.toLowerCase();
-        }
-      });
-    }
-
+    
     // Initialize
     document.addEventListener('DOMContentLoaded', loadJSONFiles);
 
